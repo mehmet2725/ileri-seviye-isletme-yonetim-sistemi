@@ -1,6 +1,6 @@
 ﻿namespace ileri_seviye_depo_stoğu_projesi
 {
-    partial class Form1
+    partial class GirisEkrani
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GirisEkrani));
             btn_musteri = new Button();
             btn_calisan = new Button();
             btn_yonetici = new Button();
@@ -62,17 +62,19 @@
             btn_calisan.Size = new Size(196, 167);
             btn_calisan.TabIndex = 1;
             btn_calisan.UseVisualStyleBackColor = true;
+            btn_calisan.Click += btn_calisan_Click;
             // 
             // btn_yonetici
             // 
             btn_yonetici.BackgroundImage = (Image)resources.GetObject("btn_yonetici.BackgroundImage");
             btn_yonetici.BackgroundImageLayout = ImageLayout.Zoom;
-            btn_yonetici.FlatStyle = FlatStyle.Flat;
+            btn_yonetici.FlatStyle = FlatStyle.Popup;
             btn_yonetici.Location = new Point(757, 212);
             btn_yonetici.Name = "btn_yonetici";
             btn_yonetici.Size = new Size(196, 167);
             btn_yonetici.TabIndex = 2;
             btn_yonetici.UseVisualStyleBackColor = true;
+            btn_yonetici.Click += btn_yonetici_Click;
             // 
             // label1
             // 
@@ -133,11 +135,12 @@
             label5.TabIndex = 7;
             label5.Text = "Developed by Mehmet Sönmez";
             // 
-            // Form1
+            // GirisEkrani
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1305, 731);
             Controls.Add(label5);
             Controls.Add(label4);
@@ -149,8 +152,7 @@
             Controls.Add(btn_musteri);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
-            Name = "Form1";
-            StartPosition = FormStartPosition.CenterParent;
+            Name = "GirisEkrani";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
