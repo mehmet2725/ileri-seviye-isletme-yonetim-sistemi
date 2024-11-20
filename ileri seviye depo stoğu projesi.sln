@@ -5,6 +5,12 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ileri seviye işletme yönetim projesi", "ileri seviye depo stoğu projesi\ileri seviye işletme yönetim projesi.csproj", "{0B4439BB-9B4F-4067-9385-2F512BFA1378}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proje ile ilgili resimler", "Proje ile ilgili resimler", "{803B1FF9-EE05-4B46-9AA6-F6EE6B931726}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\OneDrive\Masaüstü\database  ilk tasarım.png = ..\..\..\OneDrive\Masaüstü\database  ilk tasarım.png
+		..\..\..\OneDrive\Masaüstü\projenin kemik yapısı.png = ..\..\..\OneDrive\Masaüstü\projenin kemik yapısı.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

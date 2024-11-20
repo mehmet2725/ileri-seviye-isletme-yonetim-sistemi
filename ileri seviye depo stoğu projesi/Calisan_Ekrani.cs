@@ -10,18 +10,16 @@ using System.Windows.Forms;
 
 namespace ileri_seviye_depo_stoğu_projesi
 {
-    public partial class Calisan_Ekrani : Form
+    public partial class lbll : Form
     {
-        public Calisan_Ekrani()
+        public lbll()
         {
             InitializeComponent();
         }
 
-        private void btn_geri_Click(object sender, EventArgs e)
+        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            GirisEkrani girisFormu = new GirisEkrani();
-            girisFormu.Show();
-            this.Close();
+
         }
     }
 }

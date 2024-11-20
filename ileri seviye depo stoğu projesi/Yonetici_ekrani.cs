@@ -17,11 +17,19 @@ namespace ileri_seviye_depo_stoğu_projesi
             InitializeComponent();
         }
 
-        private void btn_geri_Click(object sender, EventArgs e)
+        private void tab_calisanYonetim_Click(object sender, EventArgs e)
         {
-            GirisEkrani girisFormu = new GirisEkrani();
-            girisFormu.Show();
-            this.Close();
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_musteriVeri_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
