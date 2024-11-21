@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ileri_seviye_depo_stoğu_projesi
 {
-    public partial class lbll : Form
+    public partial class Calisan_Ekrani : Form
     {
-        public lbll()
+        public Calisan_Ekrani()
         {
             InitializeComponent();
         }

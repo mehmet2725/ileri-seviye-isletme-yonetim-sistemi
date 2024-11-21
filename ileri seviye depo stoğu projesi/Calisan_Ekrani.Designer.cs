@@ -1,6 +1,6 @@
 ﻿namespace ileri_seviye_depo_stoğu_projesi
 {
-    partial class lbll
+    partial class Calisan_Ekrani
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(lbll));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Calisan_Ekrani));
             data_stokBilgi = new DataGridView();
             label1 = new Label();
             label3 = new Label();

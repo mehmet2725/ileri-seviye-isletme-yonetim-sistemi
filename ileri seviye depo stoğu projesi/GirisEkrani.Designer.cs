@@ -78,13 +78,15 @@
             // 
             btn_giris.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btn_giris.BackColor = SystemColors.ActiveCaption;
+            btn_giris.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
             btn_giris.ForeColor = SystemColors.ActiveCaptionText;
-            btn_giris.Location = new Point(749, 359);
+            btn_giris.Location = new Point(744, 366);
             btn_giris.Name = "btn_giris";
             btn_giris.Size = new Size(105, 44);
             btn_giris.TabIndex = 9;
             btn_giris.Text = "Giriş";
             btn_giris.UseVisualStyleBackColor = false;
+            btn_giris.Click += btn_giris_Click;
             // 
             // txt_kulAd
             // 
