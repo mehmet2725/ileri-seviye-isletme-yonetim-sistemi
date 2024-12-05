@@ -46,6 +46,7 @@
             btn_musteriVeri = new Button();
             btn_siprisVeri = new Button();
             btn_gecmisSiprisVeri = new Button();
+            btn_geri = new Button();
             ((System.ComponentModel.ISupportInitialize)data_musteriBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_siparisBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_gecmisSiparis).BeginInit();
@@ -57,7 +58,7 @@
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             label1.ForeColor = SystemColors.ActiveCaption;
-            label1.Location = new Point(45, 24);
+            label1.Location = new Point(102, 59);
             label1.Name = "label1";
             label1.Size = new Size(148, 25);
             label1.TabIndex = 0;
@@ -66,7 +67,7 @@
             // data_musteriBilgi
             // 
             data_musteriBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_musteriBilgi.Location = new Point(45, 74);
+            data_musteriBilgi.Location = new Point(102, 109);
             data_musteriBilgi.Name = "data_musteriBilgi";
             data_musteriBilgi.Size = new Size(293, 268);
             data_musteriBilgi.TabIndex = 1;
@@ -74,7 +75,7 @@
             // data_siparisBilgi
             // 
             data_siparisBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_siparisBilgi.Location = new Point(430, 74);
+            data_siparisBilgi.Location = new Point(487, 109);
             data_siparisBilgi.Name = "data_siparisBilgi";
             data_siparisBilgi.Size = new Size(284, 268);
             data_siparisBilgi.TabIndex = 3;
@@ -85,7 +86,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             label2.ForeColor = SystemColors.ActiveCaption;
-            label2.Location = new Point(430, 24);
+            label2.Location = new Point(487, 59);
             label2.Name = "label2";
             label2.Size = new Size(137, 25);
             label2.TabIndex = 2;
@@ -96,7 +97,7 @@
             label3.AutoSize = true;
             label3.BackColor = SystemColors.ControlLight;
             label3.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            label3.Location = new Point(28, 439);
+            label3.Location = new Point(85, 474);
             label3.Name = "label3";
             label3.Size = new Size(341, 21);
             label3.TabIndex = 4;
@@ -105,7 +106,7 @@
             // txt_telNo
             // 
             txt_telNo.BackColor = SystemColors.ControlLight;
-            txt_telNo.Location = new Point(183, 515);
+            txt_telNo.Location = new Point(240, 550);
             txt_telNo.Name = "txt_telNo";
             txt_telNo.Size = new Size(100, 23);
             txt_telNo.TabIndex = 5;
@@ -115,7 +116,7 @@
             label4.AutoSize = true;
             label4.BackColor = SystemColors.ControlLight;
             label4.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            label4.Location = new Point(41, 518);
+            label4.Location = new Point(98, 553);
             label4.Name = "label4";
             label4.Size = new Size(84, 20);
             label4.TabIndex = 6;
@@ -126,7 +127,7 @@
             label5.AutoSize = true;
             label5.BackColor = SystemColors.ControlLight;
             label5.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            label5.Location = new Point(41, 572);
+            label5.Location = new Point(98, 607);
             label5.Name = "label5";
             label5.Size = new Size(59, 20);
             label5.TabIndex = 7;
@@ -135,7 +136,7 @@
             // txt_eposta
             // 
             txt_eposta.BackColor = SystemColors.ControlLight;
-            txt_eposta.Location = new Point(183, 564);
+            txt_eposta.Location = new Point(240, 599);
             txt_eposta.Name = "txt_eposta";
             txt_eposta.Size = new Size(100, 23);
             txt_eposta.TabIndex = 8;
@@ -144,7 +145,7 @@
             // 
             btn_guncelle.BackColor = SystemColors.ControlLight;
             btn_guncelle.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_guncelle.Location = new Point(324, 537);
+            btn_guncelle.Location = new Point(381, 572);
             btn_guncelle.Name = "btn_guncelle";
             btn_guncelle.Size = new Size(117, 35);
             btn_guncelle.TabIndex = 9;
@@ -154,7 +155,7 @@
             // rtb_feedback
             // 
             rtb_feedback.BackColor = SystemColors.ControlLight;
-            rtb_feedback.Location = new Point(649, 465);
+            rtb_feedback.Location = new Point(706, 500);
             rtb_feedback.Name = "rtb_feedback";
             rtb_feedback.Size = new Size(412, 164);
             rtb_feedback.TabIndex = 10;
@@ -165,7 +166,7 @@
             label6.AutoSize = true;
             label6.BackColor = SystemColors.ControlLight;
             label6.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 162);
-            label6.Location = new Point(649, 424);
+            label6.Location = new Point(706, 459);
             label6.Name = "label6";
             label6.Size = new Size(412, 25);
             label6.TabIndex = 11;
@@ -174,7 +175,7 @@
             // data_gecmisSiparis
             // 
             data_gecmisSiparis.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_gecmisSiparis.Location = new Point(787, 74);
+            data_gecmisSiparis.Location = new Point(844, 109);
             data_gecmisSiparis.Name = "data_gecmisSiparis";
             data_gecmisSiparis.Size = new Size(284, 268);
             data_gecmisSiparis.TabIndex = 13;
@@ -185,7 +186,7 @@
             label7.BackColor = Color.Transparent;
             label7.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             label7.ForeColor = SystemColors.ActiveCaption;
-            label7.Location = new Point(787, 24);
+            label7.Location = new Point(844, 59);
             label7.Name = "label7";
             label7.Size = new Size(157, 25);
             label7.TabIndex = 12;
@@ -195,7 +196,7 @@
             // 
             btn_musteriVeri.BackColor = SystemColors.ControlLight;
             btn_musteriVeri.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_musteriVeri.Location = new Point(45, 367);
+            btn_musteriVeri.Location = new Point(102, 402);
             btn_musteriVeri.Name = "btn_musteriVeri";
             btn_musteriVeri.Size = new Size(117, 35);
             btn_musteriVeri.TabIndex = 14;
@@ -206,7 +207,7 @@
             // 
             btn_siprisVeri.BackColor = SystemColors.ControlLight;
             btn_siprisVeri.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_siprisVeri.Location = new Point(430, 367);
+            btn_siprisVeri.Location = new Point(487, 402);
             btn_siprisVeri.Name = "btn_siprisVeri";
             btn_siprisVeri.Size = new Size(117, 35);
             btn_siprisVeri.TabIndex = 15;
@@ -217,12 +218,22 @@
             // 
             btn_gecmisSiprisVeri.BackColor = SystemColors.ControlLight;
             btn_gecmisSiprisVeri.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_gecmisSiprisVeri.Location = new Point(787, 367);
+            btn_gecmisSiprisVeri.Location = new Point(844, 402);
             btn_gecmisSiprisVeri.Name = "btn_gecmisSiprisVeri";
             btn_gecmisSiprisVeri.Size = new Size(117, 35);
             btn_gecmisSiprisVeri.TabIndex = 16;
             btn_gecmisSiprisVeri.Text = "Veri Çek";
             btn_gecmisSiprisVeri.UseVisualStyleBackColor = false;
+            // 
+            // btn_geri
+            // 
+            btn_geri.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
+            btn_geri.Location = new Point(47, 23);
+            btn_geri.Name = "btn_geri";
+            btn_geri.Size = new Size(80, 33);
+            btn_geri.TabIndex = 17;
+            btn_geri.Text = "Geri";
+            btn_geri.UseVisualStyleBackColor = true;
             // 
             // MusteriEkrani
             // 
@@ -230,7 +241,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
-            ClientSize = new Size(1098, 641);
+            ClientSize = new Size(1134, 684);
+            Controls.Add(btn_geri);
             Controls.Add(btn_gecmisSiprisVeri);
             Controls.Add(btn_siprisVeri);
             Controls.Add(btn_musteriVeri);
@@ -276,5 +288,6 @@
         private Button btn_musteriVeri;
         private Button btn_siprisVeri;
         private Button btn_gecmisSiprisVeri;
+        private Button btn_geri;
     }
 }

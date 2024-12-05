@@ -16,7 +16,5 @@ namespace ileri_seviye_depo_stoğu_projesi
         {
             InitializeComponent();
         }
-
-        
     }
 }

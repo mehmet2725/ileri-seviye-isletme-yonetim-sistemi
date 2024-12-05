@@ -31,38 +31,52 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Yonetici_ekrani));
             tabcontrol = new TabControl();
             tab_calisanYonetim = new TabPage();
+            btn_vardiyaVeri = new Button();
+            btn_calisanVeri = new Button();
             label2 = new Label();
             data_vardiyaIzin = new DataGridView();
             label1 = new Label();
             data_calisan = new DataGridView();
             tab_musteriSiparisYonetim = new TabPage();
+            btn_siparisVeri = new Button();
+            btn_musteriVeri = new Button();
             data_muteriSiparis = new DataGridView();
             label4 = new Label();
             data_musteri = new DataGridView();
             label3 = new Label();
             tab_stokSatis = new TabPage();
+            btn_stokVeri = new Button();
+            btn_satisVeri = new Button();
             data_satisRapor = new DataGridView();
             label5 = new Label();
             data_Stok = new DataGridView();
             label6 = new Label();
             tab_yetkiErisim = new TabPage();
+            btn_yetkiErisimVeri = new Button();
             data_yetkiErisim = new DataGridView();
             label8 = new Label();
             tab_logKaydı = new TabPage();
+            btn_logVeri = new Button();
             data_logKaydi = new DataGridView();
             label7 = new Label();
             tab_siparisTakip = new TabPage();
+            btn_siparisTakipVeri = new Button();
             data_genelSiparis = new DataGridView();
             label9 = new Label();
-            btn_calisanVeri = new Button();
-            btn_vardiyaVeri = new Button();
-            btn_musteriVeri = new Button();
-            btn_siparisVeri = new Button();
-            btn_satisVeri = new Button();
-            btn_stokVeri = new Button();
-            btn_yetkiErisimVeri = new Button();
-            btn_logVeri = new Button();
-            btn_siparisTakipVeri = new Button();
+            tab_kayit = new TabPage();
+            label10 = new Label();
+            label11 = new Label();
+            txt_KAdi = new TextBox();
+            txt_sifre = new TextBox();
+            btn_kayit = new Button();
+            radio_musteri = new RadioButton();
+            radio_calisan = new RadioButton();
+            radio_yonetici = new RadioButton();
+            btn_geri = new Button();
+            label12 = new Label();
+            label13 = new Label();
+            txt_telNo = new TextBox();
+            txt_ePosta = new TextBox();
             tabcontrol.SuspendLayout();
             tab_calisanYonetim.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_vardiyaIzin).BeginInit();
@@ -79,6 +93,7 @@
             ((System.ComponentModel.ISupportInitialize)data_logKaydi).BeginInit();
             tab_siparisTakip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_genelSiparis).BeginInit();
+            tab_kayit.SuspendLayout();
             SuspendLayout();
             // 
             // tabcontrol
@@ -89,7 +104,8 @@
             tabcontrol.Controls.Add(tab_yetkiErisim);
             tabcontrol.Controls.Add(tab_logKaydı);
             tabcontrol.Controls.Add(tab_siparisTakip);
-            tabcontrol.Location = new Point(60, 42);
+            tabcontrol.Controls.Add(tab_kayit);
+            tabcontrol.Location = new Point(93, 55);
             tabcontrol.Name = "tabcontrol";
             tabcontrol.SelectedIndex = 0;
             tabcontrol.Size = new Size(926, 563);
@@ -111,6 +127,28 @@
             tab_calisanYonetim.Text = "Çalışan Yönetimi";
             tab_calisanYonetim.UseVisualStyleBackColor = true;
             tab_calisanYonetim.Click += tab_calisanYonetim_Click;
+            // 
+            // btn_vardiyaVeri
+            // 
+            btn_vardiyaVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_vardiyaVeri.ForeColor = Color.Black;
+            btn_vardiyaVeri.Location = new Point(772, 399);
+            btn_vardiyaVeri.Name = "btn_vardiyaVeri";
+            btn_vardiyaVeri.Size = new Size(84, 32);
+            btn_vardiyaVeri.TabIndex = 10;
+            btn_vardiyaVeri.Text = "Veri Çek";
+            btn_vardiyaVeri.UseVisualStyleBackColor = true;
+            // 
+            // btn_calisanVeri
+            // 
+            btn_calisanVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_calisanVeri.ForeColor = Color.Black;
+            btn_calisanVeri.Location = new Point(340, 399);
+            btn_calisanVeri.Name = "btn_calisanVeri";
+            btn_calisanVeri.Size = new Size(84, 32);
+            btn_calisanVeri.TabIndex = 9;
+            btn_calisanVeri.Text = "Veri Çek";
+            btn_calisanVeri.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -163,6 +201,29 @@
             tab_musteriSiparisYonetim.TabIndex = 1;
             tab_musteriSiparisYonetim.Text = "Müşteri ve Sipariş Yönetimi";
             tab_musteriSiparisYonetim.UseVisualStyleBackColor = true;
+            // 
+            // btn_siparisVeri
+            // 
+            btn_siparisVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_siparisVeri.ForeColor = Color.Black;
+            btn_siparisVeri.Location = new Point(701, 391);
+            btn_siparisVeri.Name = "btn_siparisVeri";
+            btn_siparisVeri.Size = new Size(84, 32);
+            btn_siparisVeri.TabIndex = 10;
+            btn_siparisVeri.Text = "Veri Çek";
+            btn_siparisVeri.UseVisualStyleBackColor = true;
+            // 
+            // btn_musteriVeri
+            // 
+            btn_musteriVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_musteriVeri.ForeColor = Color.Black;
+            btn_musteriVeri.Location = new Point(284, 391);
+            btn_musteriVeri.Name = "btn_musteriVeri";
+            btn_musteriVeri.Size = new Size(84, 32);
+            btn_musteriVeri.TabIndex = 9;
+            btn_musteriVeri.Text = "Veri Çek";
+            btn_musteriVeri.UseVisualStyleBackColor = true;
+            btn_musteriVeri.Click += btn_musteriVeri_Click;
             // 
             // data_muteriSiparis
             // 
@@ -217,6 +278,28 @@
             tab_stokSatis.Text = "Stok ve Satış Raporları";
             tab_stokSatis.UseVisualStyleBackColor = true;
             // 
+            // btn_stokVeri
+            // 
+            btn_stokVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_stokVeri.ForeColor = Color.Black;
+            btn_stokVeri.Location = new Point(304, 411);
+            btn_stokVeri.Name = "btn_stokVeri";
+            btn_stokVeri.Size = new Size(84, 32);
+            btn_stokVeri.TabIndex = 11;
+            btn_stokVeri.Text = "Veri Çek";
+            btn_stokVeri.UseVisualStyleBackColor = true;
+            // 
+            // btn_satisVeri
+            // 
+            btn_satisVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_satisVeri.ForeColor = Color.Black;
+            btn_satisVeri.Location = new Point(721, 411);
+            btn_satisVeri.Name = "btn_satisVeri";
+            btn_satisVeri.Size = new Size(84, 32);
+            btn_satisVeri.TabIndex = 10;
+            btn_satisVeri.Text = "Veri Çek";
+            btn_satisVeri.UseVisualStyleBackColor = true;
+            // 
             // data_satisRapor
             // 
             data_satisRapor.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -266,6 +349,17 @@
             tab_yetkiErisim.Text = "Yetki ve Erişim Kontrolü";
             tab_yetkiErisim.UseVisualStyleBackColor = true;
             // 
+            // btn_yetkiErisimVeri
+            // 
+            btn_yetkiErisimVeri.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            btn_yetkiErisimVeri.ForeColor = Color.Black;
+            btn_yetkiErisimVeri.Location = new Point(688, 468);
+            btn_yetkiErisimVeri.Name = "btn_yetkiErisimVeri";
+            btn_yetkiErisimVeri.Size = new Size(104, 48);
+            btn_yetkiErisimVeri.TabIndex = 10;
+            btn_yetkiErisimVeri.Text = "Veri Çek";
+            btn_yetkiErisimVeri.UseVisualStyleBackColor = true;
+            // 
             // data_yetkiErisim
             // 
             data_yetkiErisim.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -296,6 +390,17 @@
             tab_logKaydı.TabIndex = 4;
             tab_logKaydı.Text = "Log Kaydı";
             tab_logKaydı.UseVisualStyleBackColor = true;
+            // 
+            // btn_logVeri
+            // 
+            btn_logVeri.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            btn_logVeri.ForeColor = Color.Black;
+            btn_logVeri.Location = new Point(714, 472);
+            btn_logVeri.Name = "btn_logVeri";
+            btn_logVeri.Size = new Size(104, 48);
+            btn_logVeri.TabIndex = 11;
+            btn_logVeri.Text = "Veri Çek";
+            btn_logVeri.UseVisualStyleBackColor = true;
             // 
             // data_logKaydi
             // 
@@ -328,6 +433,17 @@
             tab_siparisTakip.Text = "Sipariş Takibi";
             tab_siparisTakip.UseVisualStyleBackColor = true;
             // 
+            // btn_siparisTakipVeri
+            // 
+            btn_siparisTakipVeri.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            btn_siparisTakipVeri.ForeColor = Color.Black;
+            btn_siparisTakipVeri.Location = new Point(675, 473);
+            btn_siparisTakipVeri.Name = "btn_siparisTakipVeri";
+            btn_siparisTakipVeri.Size = new Size(104, 48);
+            btn_siparisTakipVeri.TabIndex = 12;
+            btn_siparisTakipVeri.Text = "Veri Çek";
+            btn_siparisTakipVeri.UseVisualStyleBackColor = true;
+            // 
             // data_genelSiparis
             // 
             data_genelSiparis.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -346,105 +462,144 @@
             label9.TabIndex = 0;
             label9.Text = "Sipariş Takibi";
             // 
-            // btn_calisanVeri
+            // tab_kayit
             // 
-            btn_calisanVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_calisanVeri.ForeColor = Color.Black;
-            btn_calisanVeri.Location = new Point(340, 399);
-            btn_calisanVeri.Name = "btn_calisanVeri";
-            btn_calisanVeri.Size = new Size(84, 32);
-            btn_calisanVeri.TabIndex = 9;
-            btn_calisanVeri.Text = "Veri Çek";
-            btn_calisanVeri.UseVisualStyleBackColor = true;
+            tab_kayit.Controls.Add(radio_yonetici);
+            tab_kayit.Controls.Add(radio_calisan);
+            tab_kayit.Controls.Add(radio_musteri);
+            tab_kayit.Controls.Add(btn_kayit);
+            tab_kayit.Controls.Add(txt_ePosta);
+            tab_kayit.Controls.Add(txt_sifre);
+            tab_kayit.Controls.Add(txt_telNo);
+            tab_kayit.Controls.Add(label13);
+            tab_kayit.Controls.Add(txt_KAdi);
+            tab_kayit.Controls.Add(label12);
+            tab_kayit.Controls.Add(label11);
+            tab_kayit.Controls.Add(label10);
+            tab_kayit.Location = new Point(4, 24);
+            tab_kayit.Name = "tab_kayit";
+            tab_kayit.Padding = new Padding(3);
+            tab_kayit.Size = new Size(918, 535);
+            tab_kayit.TabIndex = 6;
+            tab_kayit.Text = "Kayıt Oluştur";
+            tab_kayit.UseVisualStyleBackColor = true;
             // 
-            // btn_vardiyaVeri
+            // label10
             // 
-            btn_vardiyaVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_vardiyaVeri.ForeColor = Color.Black;
-            btn_vardiyaVeri.Location = new Point(772, 399);
-            btn_vardiyaVeri.Name = "btn_vardiyaVeri";
-            btn_vardiyaVeri.Size = new Size(84, 32);
-            btn_vardiyaVeri.TabIndex = 10;
-            btn_vardiyaVeri.Text = "Veri Çek";
-            btn_vardiyaVeri.UseVisualStyleBackColor = true;
+            label10.AutoSize = true;
+            label10.Location = new Point(323, 76);
+            label10.Name = "label10";
+            label10.Size = new Size(73, 15);
+            label10.TabIndex = 0;
+            label10.Text = "Kullanıcı Adı";
             // 
-            // btn_musteriVeri
+            // label11
             // 
-            btn_musteriVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_musteriVeri.ForeColor = Color.Black;
-            btn_musteriVeri.Location = new Point(284, 391);
-            btn_musteriVeri.Name = "btn_musteriVeri";
-            btn_musteriVeri.Size = new Size(84, 32);
-            btn_musteriVeri.TabIndex = 9;
-            btn_musteriVeri.Text = "Veri Çek";
-            btn_musteriVeri.UseVisualStyleBackColor = true;
-            btn_musteriVeri.Click += btn_musteriVeri_Click;
+            label11.AutoSize = true;
+            label11.Location = new Point(323, 138);
+            label11.Name = "label11";
+            label11.Size = new Size(30, 15);
+            label11.TabIndex = 1;
+            label11.Text = "Şifre";
             // 
-            // btn_siparisVeri
+            // txt_KAdi
             // 
-            btn_siparisVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_siparisVeri.ForeColor = Color.Black;
-            btn_siparisVeri.Location = new Point(701, 391);
-            btn_siparisVeri.Name = "btn_siparisVeri";
-            btn_siparisVeri.Size = new Size(84, 32);
-            btn_siparisVeri.TabIndex = 10;
-            btn_siparisVeri.Text = "Veri Çek";
-            btn_siparisVeri.UseVisualStyleBackColor = true;
+            txt_KAdi.Location = new Point(430, 68);
+            txt_KAdi.Name = "txt_KAdi";
+            txt_KAdi.Size = new Size(100, 23);
+            txt_KAdi.TabIndex = 2;
             // 
-            // btn_satisVeri
+            // txt_sifre
             // 
-            btn_satisVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_satisVeri.ForeColor = Color.Black;
-            btn_satisVeri.Location = new Point(721, 411);
-            btn_satisVeri.Name = "btn_satisVeri";
-            btn_satisVeri.Size = new Size(84, 32);
-            btn_satisVeri.TabIndex = 10;
-            btn_satisVeri.Text = "Veri Çek";
-            btn_satisVeri.UseVisualStyleBackColor = true;
+            txt_sifre.Location = new Point(430, 130);
+            txt_sifre.Name = "txt_sifre";
+            txt_sifre.Size = new Size(100, 23);
+            txt_sifre.TabIndex = 3;
             // 
-            // btn_stokVeri
+            // btn_kayit
             // 
-            btn_stokVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_stokVeri.ForeColor = Color.Black;
-            btn_stokVeri.Location = new Point(304, 411);
-            btn_stokVeri.Name = "btn_stokVeri";
-            btn_stokVeri.Size = new Size(84, 32);
-            btn_stokVeri.TabIndex = 11;
-            btn_stokVeri.Text = "Veri Çek";
-            btn_stokVeri.UseVisualStyleBackColor = true;
+            btn_kayit.Location = new Point(542, 319);
+            btn_kayit.Name = "btn_kayit";
+            btn_kayit.Size = new Size(75, 23);
+            btn_kayit.TabIndex = 4;
+            btn_kayit.Text = "Kaydet";
+            btn_kayit.UseVisualStyleBackColor = true;
             // 
-            // btn_yetkiErisimVeri
+            // radio_musteri
             // 
-            btn_yetkiErisimVeri.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
-            btn_yetkiErisimVeri.ForeColor = Color.Black;
-            btn_yetkiErisimVeri.Location = new Point(688, 468);
-            btn_yetkiErisimVeri.Name = "btn_yetkiErisimVeri";
-            btn_yetkiErisimVeri.Size = new Size(104, 48);
-            btn_yetkiErisimVeri.TabIndex = 10;
-            btn_yetkiErisimVeri.Text = "Veri Çek";
-            btn_yetkiErisimVeri.UseVisualStyleBackColor = true;
+            radio_musteri.AutoSize = true;
+            radio_musteri.Location = new Point(323, 282);
+            radio_musteri.Name = "radio_musteri";
+            radio_musteri.Size = new Size(65, 19);
+            radio_musteri.TabIndex = 5;
+            radio_musteri.TabStop = true;
+            radio_musteri.Text = "Müşteri";
+            radio_musteri.UseVisualStyleBackColor = true;
+            radio_musteri.CheckedChanged += radio_musteri_CheckedChanged;
             // 
-            // btn_logVeri
+            // radio_calisan
             // 
-            btn_logVeri.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
-            btn_logVeri.ForeColor = Color.Black;
-            btn_logVeri.Location = new Point(714, 472);
-            btn_logVeri.Name = "btn_logVeri";
-            btn_logVeri.Size = new Size(104, 48);
-            btn_logVeri.TabIndex = 11;
-            btn_logVeri.Text = "Veri Çek";
-            btn_logVeri.UseVisualStyleBackColor = true;
+            radio_calisan.AutoSize = true;
+            radio_calisan.Location = new Point(430, 282);
+            radio_calisan.Name = "radio_calisan";
+            radio_calisan.Size = new Size(63, 19);
+            radio_calisan.TabIndex = 6;
+            radio_calisan.TabStop = true;
+            radio_calisan.Text = "Çalışan";
+            radio_calisan.UseVisualStyleBackColor = true;
             // 
-            // btn_siparisTakipVeri
+            // radio_yonetici
             // 
-            btn_siparisTakipVeri.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
-            btn_siparisTakipVeri.ForeColor = Color.Black;
-            btn_siparisTakipVeri.Location = new Point(675, 473);
-            btn_siparisTakipVeri.Name = "btn_siparisTakipVeri";
-            btn_siparisTakipVeri.Size = new Size(104, 48);
-            btn_siparisTakipVeri.TabIndex = 12;
-            btn_siparisTakipVeri.Text = "Veri Çek";
-            btn_siparisTakipVeri.UseVisualStyleBackColor = true;
+            radio_yonetici.AutoSize = true;
+            radio_yonetici.Location = new Point(542, 282);
+            radio_yonetici.Name = "radio_yonetici";
+            radio_yonetici.Size = new Size(67, 19);
+            radio_yonetici.TabIndex = 7;
+            radio_yonetici.TabStop = true;
+            radio_yonetici.Text = "Yönetici";
+            radio_yonetici.UseVisualStyleBackColor = true;
+            // 
+            // btn_geri
+            // 
+            btn_geri.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
+            btn_geri.Location = new Point(12, 12);
+            btn_geri.Name = "btn_geri";
+            btn_geri.Size = new Size(85, 37);
+            btn_geri.TabIndex = 8;
+            btn_geri.Text = "Geri";
+            btn_geri.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(323, 179);
+            label12.Name = "label12";
+            label12.Size = new Size(99, 15);
+            label12.TabIndex = 0;
+            label12.Text = "Telefon Numarası";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(323, 241);
+            label13.Name = "label13";
+            label13.Size = new Size(47, 15);
+            label13.TabIndex = 1;
+            label13.Text = "E-Posta";
+            // 
+            // txt_telNo
+            // 
+            txt_telNo.Location = new Point(430, 171);
+            txt_telNo.Name = "txt_telNo";
+            txt_telNo.Size = new Size(100, 23);
+            txt_telNo.TabIndex = 2;
+            // 
+            // txt_ePosta
+            // 
+            txt_ePosta.Location = new Point(430, 233);
+            txt_ePosta.Name = "txt_ePosta";
+            txt_ePosta.Size = new Size(100, 23);
+            txt_ePosta.TabIndex = 3;
             // 
             // Yonetici_ekrani
             // 
@@ -453,6 +608,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1091, 666);
+            Controls.Add(btn_geri);
             Controls.Add(tabcontrol);
             Name = "Yonetici_ekrani";
             Text = "Yonetici_ekrani";
@@ -478,6 +634,8 @@
             tab_siparisTakip.ResumeLayout(false);
             tab_siparisTakip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)data_genelSiparis).EndInit();
+            tab_kayit.ResumeLayout(false);
+            tab_kayit.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -517,5 +675,19 @@
         private Button btn_yetkiErisimVeri;
         private Button btn_logVeri;
         private Button btn_siparisTakipVeri;
+        private TabPage tab_kayit;
+        private RadioButton radio_yonetici;
+        private RadioButton radio_calisan;
+        private RadioButton radio_musteri;
+        private Button btn_kayit;
+        private TextBox txt_sifre;
+        private TextBox txt_KAdi;
+        private Label label11;
+        private Label label10;
+        private Button btn_geri;
+        private TextBox txt_ePosta;
+        private TextBox txt_telNo;
+        private Label label13;
+        private Label label12;
     }
 }

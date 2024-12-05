@@ -31,5 +31,10 @@ namespace ileri_seviye_depo_stoğu_projesi
         {
 
         }
+
+        private void radio_musteri_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

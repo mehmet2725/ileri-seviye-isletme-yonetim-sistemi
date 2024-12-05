@@ -37,6 +37,7 @@
             txt_sifre = new TextBox();
             label2 = new Label();
             label3 = new Label();
+            label6 = new Label();
             SuspendLayout();
             // 
             // label4
@@ -128,6 +129,15 @@
             label3.TabIndex = 13;
             label3.Text = "Şifre";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(333, 366);
+            label6.Name = "label6";
+            label6.Size = new Size(375, 15);
+            label6.TabIndex = 14;
+            label6.Text = "*Üye değilseniz lütfen yöneticiden kullanıcı adı ve şifrenizi taep ediniz*";
+            // 
             // GirisEkrani
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -136,6 +146,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1305, 731);
+            Controls.Add(label6);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(txt_sifre);
@@ -161,5 +172,6 @@
         private TextBox txt_sifre;
         private Label label2;
         private Label label3;
+        private Label label6;
     }
 }
