@@ -38,9 +38,9 @@
             data_vardiyaSaat = new DataGridView();
             label4 = new Label();
             btn_calismaVeri = new Button();
-            btn_siparisVeri = new Button();
+            btnSiparisBilgileri = new Button();
             btn_musteriVeri = new Button();
-            btn_stokVeri = new Button();
+            btnStokBilgileri = new Button();
             btn_geri = new Button();
             ((System.ComponentModel.ISupportInitialize)data_stokBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_musteriBilgi).BeginInit();
@@ -139,16 +139,16 @@
             btn_calismaVeri.Text = "Veri Çek";
             btn_calismaVeri.UseVisualStyleBackColor = true;
             // 
-            // btn_siparisVeri
+            // btnSiparisBilgileri
             // 
-            btn_siparisVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_siparisVeri.ForeColor = Color.Black;
-            btn_siparisVeri.Location = new Point(85, 500);
-            btn_siparisVeri.Name = "btn_siparisVeri";
-            btn_siparisVeri.Size = new Size(84, 32);
-            btn_siparisVeri.TabIndex = 9;
-            btn_siparisVeri.Text = "Veri Çek";
-            btn_siparisVeri.UseVisualStyleBackColor = true;
+            btnSiparisBilgileri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnSiparisBilgileri.ForeColor = Color.Black;
+            btnSiparisBilgileri.Location = new Point(85, 500);
+            btnSiparisBilgileri.Name = "btnSiparisBilgileri";
+            btnSiparisBilgileri.Size = new Size(84, 32);
+            btnSiparisBilgileri.TabIndex = 9;
+            btnSiparisBilgileri.Text = "Veri Çek";
+            btnSiparisBilgileri.UseVisualStyleBackColor = true;
             // 
             // btn_musteriVeri
             // 
@@ -161,16 +161,16 @@
             btn_musteriVeri.Text = "Veri Çek";
             btn_musteriVeri.UseVisualStyleBackColor = true;
             // 
-            // btn_stokVeri
+            // btnStokBilgileri
             // 
-            btn_stokVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_stokVeri.ForeColor = Color.Black;
-            btn_stokVeri.Location = new Point(611, 500);
-            btn_stokVeri.Name = "btn_stokVeri";
-            btn_stokVeri.Size = new Size(84, 32);
-            btn_stokVeri.TabIndex = 11;
-            btn_stokVeri.Text = "Veri Çek";
-            btn_stokVeri.UseVisualStyleBackColor = true;
+            btnStokBilgileri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btnStokBilgileri.ForeColor = Color.Black;
+            btnStokBilgileri.Location = new Point(611, 500);
+            btnStokBilgileri.Name = "btnStokBilgileri";
+            btnStokBilgileri.Size = new Size(84, 32);
+            btnStokBilgileri.TabIndex = 11;
+            btnStokBilgileri.Text = "Veri Çek";
+            btnStokBilgileri.UseVisualStyleBackColor = true;
             // 
             // btn_geri
             // 
@@ -193,9 +193,9 @@
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1024, 761);
             Controls.Add(btn_geri);
-            Controls.Add(btn_stokVeri);
+            Controls.Add(btnStokBilgileri);
             Controls.Add(btn_musteriVeri);
-            Controls.Add(btn_siparisVeri);
+            Controls.Add(btnSiparisBilgileri);
             Controls.Add(btn_calismaVeri);
             Controls.Add(data_siparisBilgi);
             Controls.Add(label2);
@@ -227,9 +227,9 @@
         private DataGridView data_vardiyaSaat;
         private Label label4;
         private Button btn_calismaVeri;
-        private Button btn_siparisVeri;
+        private Button btnSiparisBilgileri;
         private Button btn_musteriVeri;
-        private Button btn_stokVeri;
+        private Button btnStokBilgileri;
         private Button btn_geri;
     }
 }

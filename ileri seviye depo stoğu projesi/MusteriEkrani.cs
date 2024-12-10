@@ -12,7 +12,7 @@ namespace ileri_seviye_depo_stoğu_projesi
 {
     public partial class MusteriEkrani : Form
     {
-        public MusteriEkrani()
+        public MusteriEkrani(int ilgiliId)
         {
             InitializeComponent();
         }
