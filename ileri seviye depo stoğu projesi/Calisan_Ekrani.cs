@@ -45,5 +45,10 @@ namespace ileri_seviye_depo_stoğu_projesi
         {
 
         }
+
+        private void Calisan_Ekrani_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

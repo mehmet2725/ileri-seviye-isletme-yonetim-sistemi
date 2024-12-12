@@ -94,7 +94,7 @@
             txt_kulAd.BackColor = SystemColors.InactiveCaption;
             txt_kulAd.Location = new Point(608, 242);
             txt_kulAd.Name = "txt_kulAd";
-            txt_kulAd.Size = new Size(100, 23);
+            txt_kulAd.Size = new Size(203, 23);
             txt_kulAd.TabIndex = 10;
             // 
             // txt_sifre
@@ -102,7 +102,7 @@
             txt_sifre.BackColor = SystemColors.InactiveCaption;
             txt_sifre.Location = new Point(608, 316);
             txt_sifre.Name = "txt_sifre";
-            txt_sifre.Size = new Size(100, 23);
+            txt_sifre.Size = new Size(203, 23);
             txt_sifre.TabIndex = 11;
             // 
             // label2
@@ -134,9 +134,9 @@
             label6.AutoSize = true;
             label6.Location = new Point(333, 366);
             label6.Name = "label6";
-            label6.Size = new Size(375, 15);
+            label6.Size = new Size(378, 15);
             label6.TabIndex = 14;
-            label6.Text = "*Üye değilseniz lütfen yöneticiden kullanıcı adı ve şifrenizi taep ediniz*";
+            label6.Text = "*Üye değilseniz lütfen yöneticiden kullanıcı adı ve şifrenizi talep ediniz*";
             // 
             // GirisEkrani
             // 

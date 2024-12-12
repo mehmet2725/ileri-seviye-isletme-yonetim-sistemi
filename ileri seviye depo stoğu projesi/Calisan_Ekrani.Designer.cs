@@ -208,6 +208,7 @@
             ForeColor = SystemColors.ActiveCaption;
             Name = "Calisan_Ekrani";
             Text = "Calisan_Ekrani";
+            Load += Calisan_Ekrani_Load_1;
             ((System.ComponentModel.ISupportInitialize)data_stokBilgi).EndInit();
             ((System.ComponentModel.ISupportInitialize)data_musteriBilgi).EndInit();
             ((System.ComponentModel.ISupportInitialize)data_siparisBilgi).EndInit();
