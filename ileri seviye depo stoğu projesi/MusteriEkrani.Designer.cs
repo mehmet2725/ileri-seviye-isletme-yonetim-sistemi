@@ -47,6 +47,7 @@
             btn_siprisVeri = new Button();
             btn_gecmisSiprisVeri = new Button();
             btn_geri = new Button();
+            btn_gonder = new Button();
             ((System.ComponentModel.ISupportInitialize)data_musteriBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_siparisBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_gecmisSiparis).BeginInit();
@@ -155,7 +156,7 @@
             // rtb_feedback
             // 
             rtb_feedback.BackColor = SystemColors.ControlLight;
-            rtb_feedback.Location = new Point(706, 500);
+            rtb_feedback.Location = new Point(706, 476);
             rtb_feedback.Name = "rtb_feedback";
             rtb_feedback.Size = new Size(412, 164);
             rtb_feedback.TabIndex = 10;
@@ -166,7 +167,7 @@
             label6.AutoSize = true;
             label6.BackColor = SystemColors.ControlLight;
             label6.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 162);
-            label6.Location = new Point(706, 459);
+            label6.Location = new Point(706, 440);
             label6.Name = "label6";
             label6.Size = new Size(412, 25);
             label6.TabIndex = 11;
@@ -202,6 +203,7 @@
             btn_musteriVeri.TabIndex = 14;
             btn_musteriVeri.Text = "Veri Çek";
             btn_musteriVeri.UseVisualStyleBackColor = false;
+            btn_musteriVeri.Click += btn_musteriVeri_Click_1;
             // 
             // btn_siprisVeri
             // 
@@ -235,6 +237,15 @@
             btn_geri.Text = "Geri";
             btn_geri.UseVisualStyleBackColor = true;
             // 
+            // btn_gonder
+            // 
+            btn_gonder.Location = new Point(1024, 649);
+            btn_gonder.Name = "btn_gonder";
+            btn_gonder.Size = new Size(75, 23);
+            btn_gonder.TabIndex = 18;
+            btn_gonder.Text = "Gönder";
+            btn_gonder.UseVisualStyleBackColor = true;
+            // 
             // MusteriEkrani
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -242,6 +253,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1134, 684);
+            Controls.Add(btn_gonder);
             Controls.Add(btn_geri);
             Controls.Add(btn_gecmisSiprisVeri);
             Controls.Add(btn_siprisVeri);
@@ -289,5 +301,6 @@
         private Button btn_siprisVeri;
         private Button btn_gecmisSiprisVeri;
         private Button btn_geri;
+        private Button btn_gonder;
     }
 }
