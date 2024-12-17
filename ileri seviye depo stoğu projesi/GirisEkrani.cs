@@ -18,7 +18,6 @@ namespace ileri_seviye_depo_stoğu_projesi
         private void GirisEkrani_Load(object sender, EventArgs e)
         {
             // Form yüklendiğinde yapılacak işlemler (şimdilik boş bırakıldı).
-            // Örneğin: Varsayılan metin kutusu değerlerini ayarlamak veya UI özelleştirmeleri yapmak için kullanılabilir.
         }
 
         private void btn_giris_Click(object sender, EventArgs e)
@@ -79,8 +78,17 @@ namespace ileri_seviye_depo_stoğu_projesi
                             {
                                 // Eğer kullanıcı adı veya şifre yanlışsa hata mesajı gösteriliyor.
                                 MessageBox.Show("Kullanıcı adı veya şifre yanlış!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return; // Log kaydı yapılmaması için çıkıyoruz.
                             }
                         }
+                    }
+
+                    // Log kaydını ekliyoruz.
+                    string logQuery = "INSERT INTO loglar (kullanici_id, islem_tipi, detaylar) VALUES (@kullaniciId, 'Giriş', 'Kullanıcı başarıyla giriş yaptı.')";
+                    using (MySqlCommand logCommand = new MySqlCommand(logQuery, connection))
+                    {
+                        logCommand.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
+                        logCommand.ExecuteNonQuery();
                     }
                 }
                 catch (Exception ex)
@@ -93,9 +101,12 @@ namespace ileri_seviye_depo_stoğu_projesi
 
         private void txt_sifre_TextChanged(object sender, EventArgs e)
         {
-            // Şifre alanındaki yazıları gizlemek için PasswordChar özelliğini kullanıyoruz.
-            // Kullanıcı şifre girerken güvenliği sağlamak için '*' karakteri gösteriliyor.
             txt_sifre.PasswordChar = '*';
+        }
+
+        private void chk_sifreGoster_CheckedChanged(object sender, EventArgs e)
+        {
+            txt_sifre.PasswordChar = chk_sifreGoster.Checked ? '\0' : '*';
         }
     }
 }

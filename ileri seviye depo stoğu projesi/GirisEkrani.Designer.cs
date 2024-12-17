@@ -38,6 +38,7 @@
             label2 = new Label();
             label3 = new Label();
             label6 = new Label();
+            chk_sifreGoster = new CheckBox();
             SuspendLayout();
             // 
             // label4
@@ -138,14 +139,25 @@
             label6.TabIndex = 14;
             label6.Text = "*Üye değilseniz lütfen yöneticiden kullanıcı adı ve şifrenizi talep ediniz*";
             // 
+            // chk_sifreGoster
+            // 
+            chk_sifreGoster.AutoSize = true;
+            chk_sifreGoster.Location = new Point(829, 317);
+            chk_sifreGoster.Name = "chk_sifreGoster";
+            chk_sifreGoster.Size = new Size(90, 19);
+            chk_sifreGoster.TabIndex = 15;
+            chk_sifreGoster.Text = "Göster/Gizle";
+            chk_sifreGoster.UseVisualStyleBackColor = true;
+            chk_sifreGoster.CheckedChanged += chk_sifreGoster_CheckedChanged;
+            // 
             // GirisEkrani
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            AutoValidate = AutoValidate.EnablePreventFocusChange;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1305, 731);
+            Controls.Add(chk_sifreGoster);
             Controls.Add(label6);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -158,7 +170,7 @@
             DoubleBuffered = true;
             Name = "GirisEkrani";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "GirisEkrani";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -173,5 +185,6 @@
         private Label label2;
         private Label label3;
         private Label label6;
+        private CheckBox chk_sifreGoster;
     }
 }

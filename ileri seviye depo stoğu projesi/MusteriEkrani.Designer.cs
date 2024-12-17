@@ -44,7 +44,7 @@
             data_gecmisSiparis = new DataGridView();
             label7 = new Label();
             btn_musteriVeri = new Button();
-            btn_siprisVeri = new Button();
+            btn_siparisVeri = new Button();
             btn_gecmisSiprisVeri = new Button();
             btn_geri = new Button();
             btn_gonder = new Button();
@@ -203,18 +203,18 @@
             btn_musteriVeri.TabIndex = 14;
             btn_musteriVeri.Text = "Veri Çek";
             btn_musteriVeri.UseVisualStyleBackColor = false;
-            btn_musteriVeri.Click += btn_musteriVeri_Click_1;
+            btn_musteriVeri.Click += btn_musteriVeri_Click;
             // 
-            // btn_siprisVeri
+            // btn_siparisVeri
             // 
-            btn_siprisVeri.BackColor = SystemColors.ControlLight;
-            btn_siprisVeri.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btn_siprisVeri.Location = new Point(487, 402);
-            btn_siprisVeri.Name = "btn_siprisVeri";
-            btn_siprisVeri.Size = new Size(117, 35);
-            btn_siprisVeri.TabIndex = 15;
-            btn_siprisVeri.Text = "Veri Çek";
-            btn_siprisVeri.UseVisualStyleBackColor = false;
+            btn_siparisVeri.BackColor = SystemColors.ControlLight;
+            btn_siparisVeri.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_siparisVeri.Location = new Point(487, 402);
+            btn_siparisVeri.Name = "btn_siparisVeri";
+            btn_siparisVeri.Size = new Size(117, 35);
+            btn_siparisVeri.TabIndex = 15;
+            btn_siparisVeri.Text = "Veri Çek";
+            btn_siparisVeri.UseVisualStyleBackColor = false;
             // 
             // btn_gecmisSiprisVeri
             // 
@@ -256,7 +256,7 @@
             Controls.Add(btn_gonder);
             Controls.Add(btn_geri);
             Controls.Add(btn_gecmisSiprisVeri);
-            Controls.Add(btn_siprisVeri);
+            Controls.Add(btn_siparisVeri);
             Controls.Add(btn_musteriVeri);
             Controls.Add(data_gecmisSiparis);
             Controls.Add(label7);
@@ -298,7 +298,7 @@
         private DataGridView data_gecmisSiparis;
         private Label label7;
         private Button btn_musteriVeri;
-        private Button btn_siprisVeri;
+        private Button btn_siparisVeri;
         private Button btn_gecmisSiprisVeri;
         private Button btn_geri;
         private Button btn_gonder;

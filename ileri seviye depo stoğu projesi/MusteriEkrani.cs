@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -13,53 +7,80 @@ namespace ileri_seviye_depo_stoğu_projesi
 {
     public partial class MusteriEkrani : Form
     {
-        public MusteriEkrani(int ilgiliId)
+        private int musteriId; // Giriş ekranından gelen ilgili tablo ID'si
+
+        public MusteriEkrani(int ilgiliTabloId)
         {
             InitializeComponent();
+            musteriId = ilgiliTabloId; // ID'yi değişkene atıyoruz
         }
 
-
-        // Veritabanı bağlantı bilgileri
-       
-
-        private void btn_musteriVeri_Click_1(object sender, EventArgs e)
+        private void btn_musteriVeri_Click(object sender, EventArgs e)
         {
+            // Veritabanından Müşteri Bilgilerini çekiyoruz
             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            string query = "SELECT musteri_id, borc_durumu, toplam_alacak, hesap_durumu, telefon, eposta, adres, kayit_tarihi FROM musteriler WHERE musteri_id = @musteriId";
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-
-                    // Giriş yapan kullanıcının ID'sine göre müşteri bilgilerini getiriyoruz
-                    string query = "SELECT * FROM musteriler WHERE kullanici_id = @kullaniciId";
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        // Kullanıcı ID'sini parametre olarak geçiyoruz
-                        command.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
+                        command.Parameters.AddWithValue("@musteriId", musteriId);
 
-                        MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-                        DataTable dataTable = new DataTable();
-
-                        // Datagridview'e dolduruyoruz
-                        adapter.Fill(dataTable);
-                        data_musteriBilgi.DataSource = dataTable;
-
-                        // Log kaydı
-                        string logQuery = "INSERT INTO loglar (kullanici_id, islem_tipi, detaylar) VALUES (@kullaniciId, 'Veri Çekme', 'Müşteri bilgileri görüntülendi.')";
-                        using (MySqlCommand logCommand = new MySqlCommand(logQuery, connection))
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                         {
-                            logCommand.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
-                            logCommand.ExecuteNonQuery();
+                            DataTable table = new DataTable();
+                            adapter.Fill(table);
+                            data_musteriBilgi.DataSource = table; // DataGridView'e bağlama
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Bir hata oluştu: " + ex.Message);
                 }
             }
+        }
+
+        private void btn_siparisVeri_Click(object sender, EventArgs e)
+        {
+            // Veritabanından Sipariş Bilgilerini çekiyoruz
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            string query = @"SELECT s.siparis_id, s.siparis_tarihi, s.toplam_tutar, s.siparis_durumu, su.urun_id, su.miktar, su.birim_fiyat, su.toplam_fiyat 
+                             FROM siparisler s 
+                             JOIN siparis_urunler su ON s.siparis_id = su.siparis_id 
+                             WHERE s.musteri_id = @musteriId";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@musteriId", musteriId);
+
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                        {
+                            DataTable table = new DataTable();
+                            adapter.Fill(table);
+                            data_siparisBilgi.DataSource = table; // DataGridView'e bağlama
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Bir hata oluştu: " + ex.Message);
+                }
+            }
+        }
+
+        private void MusteriEkrani_Load(object sender, EventArgs e)
+        {
+            // Form yüklenirken herhangi bir işlem eklenebilir
         }
     }
 }
