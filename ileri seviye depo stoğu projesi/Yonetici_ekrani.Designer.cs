@@ -64,19 +64,20 @@
             data_genelSiparis = new DataGridView();
             label9 = new Label();
             tab_kayit = new TabPage();
-            label10 = new Label();
-            label11 = new Label();
-            txt_KAdi = new TextBox();
-            txt_sifre = new TextBox();
-            btn_kayit = new Button();
-            radio_musteri = new RadioButton();
-            radio_calisan = new RadioButton();
             radio_yonetici = new RadioButton();
-            btn_geri = new Button();
-            label12 = new Label();
-            label13 = new Label();
-            txt_telNo = new TextBox();
+            radio_calisan = new RadioButton();
+            radio_musteri = new RadioButton();
+            btn_kayit = new Button();
             txt_ePosta = new TextBox();
+            txt_sifre = new TextBox();
+            txt_telNo = new TextBox();
+            label13 = new Label();
+            txt_KAdi = new TextBox();
+            label12 = new Label();
+            label11 = new Label();
+            label10 = new Label();
+            btn_geri = new Button();
+            tab_siparisOlustur = new TabPage();
             tabcontrol.SuspendLayout();
             tab_calisanYonetim.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_vardiyaIzin).BeginInit();
@@ -105,6 +106,7 @@
             tabcontrol.Controls.Add(tab_logKaydı);
             tabcontrol.Controls.Add(tab_siparisTakip);
             tabcontrol.Controls.Add(tab_kayit);
+            tabcontrol.Controls.Add(tab_siparisOlustur);
             tabcontrol.Location = new Point(93, 55);
             tabcontrol.Name = "tabcontrol";
             tabcontrol.SelectedIndex = 0;
@@ -484,46 +486,27 @@
             tab_kayit.Text = "Kayıt Oluştur";
             tab_kayit.UseVisualStyleBackColor = true;
             // 
-            // label10
+            // radio_yonetici
             // 
-            label10.AutoSize = true;
-            label10.Location = new Point(323, 76);
-            label10.Name = "label10";
-            label10.Size = new Size(73, 15);
-            label10.TabIndex = 0;
-            label10.Text = "Kullanıcı Adı";
+            radio_yonetici.AutoSize = true;
+            radio_yonetici.Location = new Point(542, 282);
+            radio_yonetici.Name = "radio_yonetici";
+            radio_yonetici.Size = new Size(67, 19);
+            radio_yonetici.TabIndex = 7;
+            radio_yonetici.TabStop = true;
+            radio_yonetici.Text = "Yönetici";
+            radio_yonetici.UseVisualStyleBackColor = true;
             // 
-            // label11
+            // radio_calisan
             // 
-            label11.AutoSize = true;
-            label11.Location = new Point(323, 138);
-            label11.Name = "label11";
-            label11.Size = new Size(30, 15);
-            label11.TabIndex = 1;
-            label11.Text = "Şifre";
-            // 
-            // txt_KAdi
-            // 
-            txt_KAdi.Location = new Point(430, 68);
-            txt_KAdi.Name = "txt_KAdi";
-            txt_KAdi.Size = new Size(100, 23);
-            txt_KAdi.TabIndex = 2;
-            // 
-            // txt_sifre
-            // 
-            txt_sifre.Location = new Point(430, 130);
-            txt_sifre.Name = "txt_sifre";
-            txt_sifre.Size = new Size(100, 23);
-            txt_sifre.TabIndex = 3;
-            // 
-            // btn_kayit
-            // 
-            btn_kayit.Location = new Point(542, 319);
-            btn_kayit.Name = "btn_kayit";
-            btn_kayit.Size = new Size(75, 23);
-            btn_kayit.TabIndex = 4;
-            btn_kayit.Text = "Kaydet";
-            btn_kayit.UseVisualStyleBackColor = true;
+            radio_calisan.AutoSize = true;
+            radio_calisan.Location = new Point(430, 282);
+            radio_calisan.Name = "radio_calisan";
+            radio_calisan.Size = new Size(63, 19);
+            radio_calisan.TabIndex = 6;
+            radio_calisan.TabStop = true;
+            radio_calisan.Text = "Çalışan";
+            radio_calisan.UseVisualStyleBackColor = true;
             // 
             // radio_musteri
             // 
@@ -537,27 +520,78 @@
             radio_musteri.UseVisualStyleBackColor = true;
             radio_musteri.CheckedChanged += radio_musteri_CheckedChanged;
             // 
-            // radio_calisan
+            // btn_kayit
             // 
-            radio_calisan.AutoSize = true;
-            radio_calisan.Location = new Point(430, 282);
-            radio_calisan.Name = "radio_calisan";
-            radio_calisan.Size = new Size(63, 19);
-            radio_calisan.TabIndex = 6;
-            radio_calisan.TabStop = true;
-            radio_calisan.Text = "Çalışan";
-            radio_calisan.UseVisualStyleBackColor = true;
+            btn_kayit.Location = new Point(542, 319);
+            btn_kayit.Name = "btn_kayit";
+            btn_kayit.Size = new Size(75, 23);
+            btn_kayit.TabIndex = 4;
+            btn_kayit.Text = "Kaydet";
+            btn_kayit.UseVisualStyleBackColor = true;
             // 
-            // radio_yonetici
+            // txt_ePosta
             // 
-            radio_yonetici.AutoSize = true;
-            radio_yonetici.Location = new Point(542, 282);
-            radio_yonetici.Name = "radio_yonetici";
-            radio_yonetici.Size = new Size(67, 19);
-            radio_yonetici.TabIndex = 7;
-            radio_yonetici.TabStop = true;
-            radio_yonetici.Text = "Yönetici";
-            radio_yonetici.UseVisualStyleBackColor = true;
+            txt_ePosta.Location = new Point(430, 233);
+            txt_ePosta.Name = "txt_ePosta";
+            txt_ePosta.Size = new Size(100, 23);
+            txt_ePosta.TabIndex = 3;
+            // 
+            // txt_sifre
+            // 
+            txt_sifre.Location = new Point(430, 130);
+            txt_sifre.Name = "txt_sifre";
+            txt_sifre.Size = new Size(100, 23);
+            txt_sifre.TabIndex = 3;
+            // 
+            // txt_telNo
+            // 
+            txt_telNo.Location = new Point(430, 171);
+            txt_telNo.Name = "txt_telNo";
+            txt_telNo.Size = new Size(100, 23);
+            txt_telNo.TabIndex = 2;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(323, 241);
+            label13.Name = "label13";
+            label13.Size = new Size(47, 15);
+            label13.TabIndex = 1;
+            label13.Text = "E-Posta";
+            // 
+            // txt_KAdi
+            // 
+            txt_KAdi.Location = new Point(430, 68);
+            txt_KAdi.Name = "txt_KAdi";
+            txt_KAdi.Size = new Size(100, 23);
+            txt_KAdi.TabIndex = 2;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(323, 179);
+            label12.Name = "label12";
+            label12.Size = new Size(100, 15);
+            label12.TabIndex = 0;
+            label12.Text = "Telefon Numarası";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(323, 138);
+            label11.Name = "label11";
+            label11.Size = new Size(30, 15);
+            label11.TabIndex = 1;
+            label11.Text = "Şifre";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(323, 76);
+            label10.Name = "label10";
+            label10.Size = new Size(73, 15);
+            label10.TabIndex = 0;
+            label10.Text = "Kullanıcı Adı";
             // 
             // btn_geri
             // 
@@ -569,37 +603,15 @@
             btn_geri.Text = "Geri";
             btn_geri.UseVisualStyleBackColor = true;
             // 
-            // label12
+            // tab_siparisOlustur
             // 
-            label12.AutoSize = true;
-            label12.Location = new Point(323, 179);
-            label12.Name = "label12";
-            label12.Size = new Size(99, 15);
-            label12.TabIndex = 0;
-            label12.Text = "Telefon Numarası";
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(323, 241);
-            label13.Name = "label13";
-            label13.Size = new Size(47, 15);
-            label13.TabIndex = 1;
-            label13.Text = "E-Posta";
-            // 
-            // txt_telNo
-            // 
-            txt_telNo.Location = new Point(430, 171);
-            txt_telNo.Name = "txt_telNo";
-            txt_telNo.Size = new Size(100, 23);
-            txt_telNo.TabIndex = 2;
-            // 
-            // txt_ePosta
-            // 
-            txt_ePosta.Location = new Point(430, 233);
-            txt_ePosta.Name = "txt_ePosta";
-            txt_ePosta.Size = new Size(100, 23);
-            txt_ePosta.TabIndex = 3;
+            tab_siparisOlustur.Location = new Point(4, 24);
+            tab_siparisOlustur.Name = "tab_siparisOlustur";
+            tab_siparisOlustur.Padding = new Padding(3);
+            tab_siparisOlustur.Size = new Size(918, 535);
+            tab_siparisOlustur.TabIndex = 7;
+            tab_siparisOlustur.Text = "Sipariş Oluştur";
+            tab_siparisOlustur.UseVisualStyleBackColor = true;
             // 
             // Yonetici_ekrani
             // 
@@ -689,5 +701,6 @@
         private TextBox txt_telNo;
         private Label label13;
         private Label label12;
+        private TabPage tab_siparisOlustur;
     }
 }

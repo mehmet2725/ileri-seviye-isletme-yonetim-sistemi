@@ -17,87 +17,90 @@ namespace ileri_seviye_depo_stoğu_projesi
 
         private void GirisEkrani_Load(object sender, EventArgs e)
         {
-            // Form yüklendiğinde yapılacak işlemler (şimdilik boş bırakıldı).
+            this.AcceptButton = btn_giris; // Enter tuşu 'btnGiris' butonunu tetikler.
+
         }
+
+
 
         private void btn_giris_Click(object sender, EventArgs e)
         {
-            // Kullanıcı giriş işlemi için gereken bilgileri alıyoruz.
-            string kullaniciAdi = txt_kulAd.Text; // Kullanıcı adı veya e-posta bilgisi.
-            string sifre = txt_sifre.Text;        // Kullanıcının giriş için girdiği şifre.
+            string kullaniciAdi = txt_kulAd.Text.Trim();
+            string sifre = txt_sifre.Text.Trim();
 
-            // Veritabanı bağlantı bilgileri (sunucu, veritabanı adı, kullanıcı adı ve şifre).
-            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            if (string.IsNullOrEmpty(kullaniciAdi) || string.IsNullOrEmpty(sifre))
             {
-                try
-                {
-                    // Veritabanı bağlantısını açıyoruz.
-                    connection.Open();
+                MessageBox.Show("Kullanıcı adı ve şifre boş bırakılamaz!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txt_kulAd.Focus();
+                return;
+            }
 
-                    // Kullanıcı giriş bilgilerini sorgulamak için SQL sorgusu oluşturuyoruz.
-                    string query = "SELECT kullanici_id, rol, ilgili_tablo_id FROM kullanicilar WHERE eposta = @kullaniciAdi AND sifre = @sifre";
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            string query = "SELECT kullanici_id, rol FROM kullanicilar WHERE eposta = @kullaniciAdi AND sifre = @sifre";
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        // SQL sorgusundaki parametreleri kullanıcı giriş bilgileriyle dolduruyoruz.
-                        command.Parameters.AddWithValue("@kullaniciAdi", txt_kulAd.Text);
-                        command.Parameters.AddWithValue("@sifre", txt_sifre.Text);
+                        command.Parameters.AddWithValue("@kullaniciAdi", kullaniciAdi);
+                        command.Parameters.AddWithValue("@sifre", sifre);
 
-                        // Sorguyu çalıştırıyoruz ve sonuçları okumak için bir MySqlDataReader kullanıyoruz.
+                        // Reader ile veriyi okuyoruz
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                // Kullanıcı bilgilerinin başarıyla alınması durumunda aşağıdaki işlemler yapılır:
-                                CurrentUserId = reader.GetInt32("kullanici_id"); // Giriş yapan kullanıcının ID'si.
-                                string rol = reader.GetString("rol");            // Kullanıcının rol bilgisi.
-                                int ilgiliTabloId = reader.IsDBNull(reader.GetOrdinal("ilgili_tablo_id")) ? 0 : reader.GetInt32("ilgili_tablo_id"); // İlgili tablo ID'si.
+                                // Giriş başarılı, kullanıcı ID'sini alıyoruz
+                                CurrentUserId = reader.GetInt32("kullanici_id");
+                                string rol = reader.GetString("rol");
 
-                                // Kullanıcının rolüne göre ilgili ekran/form açılıyor.
+                                // Rol kontrolü ve ekran yönlendirme
                                 if (rol == "Yonetici")
-                                {
-                                    Yonetici_ekrani yoneticiForm = new Yonetici_ekrani(); // Yönetici ekranı oluşturuluyor.
-                                    yoneticiForm.Show();
-                                }
+                                    new Yonetici_ekrani().Show();
                                 else if (rol == "Calisan")
-                                {
-                                    Calisan_Ekrani calisanForm = new Calisan_Ekrani(); // Çalışan ekranı oluşturuluyor.
-                                    calisanForm.Show();
-                                }
+                                    new Calisan_Ekrani().Show();
                                 else if (rol == "Musteri")
-                                {
-                                    MusteriEkrani musteriForm = new MusteriEkrani(ilgiliTabloId); // Müşteri ekranı oluşturuluyor.
-                                    musteriForm.Show();
-                                }
+                                    new MusteriEkrani(CurrentUserId).Show();
 
-                                // Giriş ekranı gizleniyor.
                                 this.Hide();
                             }
                             else
                             {
-                                // Eğer kullanıcı adı veya şifre yanlışsa hata mesajı gösteriliyor.
                                 MessageBox.Show("Kullanıcı adı veya şifre yanlış!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return; // Log kaydı yapılmaması için çıkıyoruz.
+                                txt_kulAd.Text = "";
+                                txt_sifre.Text = "";
+                                txt_kulAd.Focus();
+                                return;
                             }
                         }
                     }
+                }
 
-                    // Log kaydını ekliyoruz.
-                    string logQuery = "INSERT INTO loglar (kullanici_id, islem_tipi, detaylar) VALUES (@kullaniciId, 'Giriş', 'Kullanıcı başarıyla giriş yaptı.')";
-                    using (MySqlCommand logCommand = new MySqlCommand(logQuery, connection))
+                // Log kaydı için **yeni bağlantı** oluşturuyoruz
+                using (MySqlConnection logConnection = new MySqlConnection(connectionString))
+                {
+                    logConnection.Open();
+                    string logQuery = "INSERT INTO loglar (kullanici_id, islem_tarihi, tablo_adi, islem_tipi, detaylar) " +
+                                      "VALUES (@kullaniciId, NOW(), NULL, 'Giriş', 'Kullanıcı başarıyla giriş yaptı.')";
+
+                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, logConnection))
                     {
-                        logCommand.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
-                        logCommand.ExecuteNonQuery();
+                        logCmd.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
+                        logCmd.ExecuteNonQuery();
                     }
                 }
-                catch (Exception ex)
-                {
-                    // Veritabanı bağlantısı veya sorgu sırasında bir hata oluşursa bu mesaj gösteriliyor.
-                    MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
 
         private void txt_sifre_TextChanged(object sender, EventArgs e)
         {
@@ -108,5 +111,39 @@ namespace ileri_seviye_depo_stoğu_projesi
         {
             txt_sifre.PasswordChar = chk_sifreGoster.Checked ? '\0' : '*';
         }
+
+        private bool DogruKullaniciMi(string kullaniciAdi, string sifre)
+        {
+            bool sonuc = false;
+
+            // MySQL bağlantısını kullan
+            string connectionString = "Server=localhost;Database=proje_db;Uid=root;Pwd=138426;";
+            string query = "SELECT COUNT(*) FROM kullanicilar WHERE email = @kullaniciAdi AND sifre = @sifre";
+
+            try
+            {
+                using (MySqlConnection baglanti = new MySqlConnection(connectionString))
+                {
+                    baglanti.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, baglanti))
+                    {
+                        cmd.Parameters.AddWithValue("@kullaniciAdi", kullaniciAdi);
+                        cmd.Parameters.AddWithValue("@sifre", sifre);
+
+                        int result = Convert.ToInt32(cmd.ExecuteScalar());
+                        sonuc = result > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hata: " + ex.Message);
+            }
+
+            return sonuc;
+        }
+
+
+       
     }
 }

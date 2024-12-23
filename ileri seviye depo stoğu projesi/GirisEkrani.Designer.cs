@@ -171,6 +171,7 @@
             Name = "GirisEkrani";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "GirisEkrani";
+ 
             ResumeLayout(false);
             PerformLayout();
         }
