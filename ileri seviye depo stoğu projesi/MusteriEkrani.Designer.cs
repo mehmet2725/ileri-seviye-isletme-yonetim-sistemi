@@ -67,9 +67,9 @@
             label1.ForeColor = SystemColors.ActiveCaption;
             label1.Location = new Point(133, 49);
             label1.Name = "label1";
-            label1.Size = new Size(204, 36);
+            label1.Size = new Size(205, 36);
             label1.TabIndex = 0;
-            label1.Text = "Müşteri Bİlgileri";
+            label1.Text = "Kendi Bİlgilerim";
             // 
             // data_musteriBilgi
             // 
@@ -129,9 +129,9 @@
             label2.ForeColor = SystemColors.ActiveCaption;
             label2.Location = new Point(643, 49);
             label2.Name = "label2";
-            label2.Size = new Size(192, 36);
+            label2.Size = new Size(215, 36);
             label2.TabIndex = 2;
-            label2.Text = "Sipariş Bilgileri";
+            label2.Text = "Sipariş Bilgilerim";
             // 
             // label3
             // 
@@ -248,9 +248,9 @@
             label7.ForeColor = SystemColors.ActiveCaption;
             label7.Location = new Point(1104, 49);
             label7.Name = "label7";
-            label7.Size = new Size(217, 36);
+            label7.Size = new Size(247, 36);
             label7.TabIndex = 12;
-            label7.Text = "Geçmiş Siparişler";
+            label7.Text = "Geçmiş Siparişlerim";
             // 
             // btn_musteriVeri
             // 
@@ -260,7 +260,7 @@
             btn_musteriVeri.Name = "btn_musteriVeri";
             btn_musteriVeri.Size = new Size(230, 45);
             btn_musteriVeri.TabIndex = 14;
-            btn_musteriVeri.Text = "Veri Çek";
+            btn_musteriVeri.Text = "Bilgilerimi Çek";
             btn_musteriVeri.UseVisualStyleBackColor = false;
             btn_musteriVeri.Click += btnMusteriBilgi_Click;
             // 
@@ -292,9 +292,9 @@
             btn_siparisVeri.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
             btn_siparisVeri.Location = new Point(533, 402);
             btn_siparisVeri.Name = "btn_siparisVeri";
-            btn_siparisVeri.Size = new Size(247, 45);
+            btn_siparisVeri.Size = new Size(271, 45);
             btn_siparisVeri.TabIndex = 15;
-            btn_siparisVeri.Text = "Veri Çek";
+            btn_siparisVeri.Text = "Sipariş Bilgilerimi Çek";
             btn_siparisVeri.UseVisualStyleBackColor = false;
             btn_siparisVeri.Click += btnSiparisBilgi_Click;
             // 
@@ -304,9 +304,9 @@
             btn_gecmisSiparis.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
             btn_gecmisSiparis.Location = new Point(1001, 402);
             btn_gecmisSiparis.Name = "btn_gecmisSiparis";
-            btn_gecmisSiparis.Size = new Size(236, 45);
+            btn_gecmisSiparis.Size = new Size(350, 45);
             btn_gecmisSiparis.TabIndex = 15;
-            btn_gecmisSiparis.Text = "Veri Çek";
+            btn_gecmisSiparis.Text = "Geçmiş Sipariş Bilgilerimi Çek";
             btn_gecmisSiparis.UseVisualStyleBackColor = false;
             btn_gecmisSiparis.Click += btnGecmisSiparis_Click;
             // 

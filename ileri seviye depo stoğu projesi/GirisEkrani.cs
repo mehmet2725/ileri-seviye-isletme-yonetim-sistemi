@@ -9,6 +9,7 @@ namespace ileri_seviye_depo_stoğu_projesi
     {
         // Giriş yapan kullanıcının ID'sini saklamak için static bir özellik.
         public static int CurrentUserId { get; set; }
+        public static int CurrentUserYetkiSeviyesi { get; set; }
 
         public GirisEkrani()
         {
@@ -55,7 +56,27 @@ namespace ileri_seviye_depo_stoğu_projesi
                             {
                                 // Giriş başarılı, kullanıcı ID'sini alıyoruz
                                 CurrentUserId = reader.GetInt32("kullanici_id");
+                                MessageBox.Show($"CurrentUserId Giriş Ekranında: {CurrentUserId}", "Debug");
                                 string rol = reader.GetString("rol");
+
+                                reader.Close(); // DataReader'ı kapatıyoruz, yeni bir işlem için bağlantıyı serbest bırakıyoruz
+                                // Yetki seviyesi sorgusunu burada ekliyoruz
+                                string yetkiSeviyesiQuery = "SELECT yetki_seviyesi FROM calisanlar WHERE kullanici_id = @kullaniciId";
+                                using (MySqlCommand yetkiCmd = new MySqlCommand(yetkiSeviyesiQuery, connection))
+                                {
+                                    yetkiCmd.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
+                                    object yetkiSeviyesiResult = yetkiCmd.ExecuteScalar();
+
+                                    if (yetkiSeviyesiResult != null)
+                                    {
+                                        CurrentUserYetkiSeviyesi = Convert.ToInt32(yetkiSeviyesiResult);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Yetki seviyesi alınamadı. Sistem yöneticisine başvurun.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return;
+                                    }
+                                }
 
                                 // Rol kontrolü ve ekran yönlendirme
                                 if (rol == "Yonetici")
@@ -75,6 +96,7 @@ namespace ileri_seviye_depo_stoğu_projesi
                                 txt_kulAd.Focus();
                                 return;
                             }
+
                         }
                     }
                 }

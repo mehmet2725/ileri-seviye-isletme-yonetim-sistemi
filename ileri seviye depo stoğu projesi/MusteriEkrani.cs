@@ -303,8 +303,8 @@ namespace ileri_seviye_depo_stoğu_projesi
                         logCmd.ExecuteNonQuery();
                     }
 
-                    // Kullanıcıya sadece başarı mesajı gösteriliyor
-                    MessageBox.Show("İletişim bilgileri başarıyla güncellendi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // Kullanıcıya başarı mesajı gösteriliyor
+                    MessageBox.Show($"İletişim bilgileri başarıyla güncellendi!\nYeni Telefon: {yeniTelefon}\nYeni E-posta: {yeniEposta}", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
