@@ -165,6 +165,7 @@
             btn_musteriVeri.TabIndex = 10;
             btn_musteriVeri.Text = "Müşteri Bilgilerini Çek";
             btn_musteriVeri.UseVisualStyleBackColor = true;
+            btn_musteriVeri.Click += btn_musteriVeri_Click;
             // 
             // btn_StokBilgileri
             // 
@@ -188,6 +189,7 @@
             btn_geri.TabIndex = 12;
             btn_geri.Text = "Geri";
             btn_geri.UseVisualStyleBackColor = false;
+            btn_geri.Click += btn_geri_Click;
             // 
             // lblYetkiSeviyesi
             // 

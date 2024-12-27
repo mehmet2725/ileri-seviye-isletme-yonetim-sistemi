@@ -29,7 +29,7 @@ namespace ileri_seviye_depo_stoğu_projesi
                     {
                         cmd.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
                         MessageBox.Show($"Çalışan Ekranı - CurrentUserId: {GirisEkrani.CurrentUserId}", "Debug");
-                        
+
                         object result = cmd.ExecuteScalar();
                         // Debug için türünü ve değerini kontrol et
                         MessageBox.Show($"ExecuteScalar Result: {result}, Type: {result?.GetType()}", "Debug ExecuteScalar Result");
@@ -144,43 +144,11 @@ namespace ileri_seviye_depo_stoğu_projesi
             }
         }
 
-        private void AddButtonColumns()
-        {
-            if (data_siparisBilgi.Columns["Onayla"] == null)
-            {
-                DataGridViewButtonColumn onaylaButton = new DataGridViewButtonColumn
-                {
-                    Name = "Onayla",
-                    HeaderText = "Onayla",
-                    Text = "Onayla",
-                    UseColumnTextForButtonValue = true
-                };
-                data_siparisBilgi.Columns.Add(onaylaButton);
-            }
 
-            if (data_siparisBilgi.Columns["İptal Et"] == null)
-            {
-                DataGridViewButtonColumn iptalEtButton = new DataGridViewButtonColumn
-                {
-                    Name = "İptal Et",
-                    HeaderText = "İptal Et",
-                    Text = "İptal Et",
-                    UseColumnTextForButtonValue = true
-                };
-                data_siparisBilgi.Columns.Add(iptalEtButton);
-            }
-        }
 
 
         private void btn_SiparisBilgileri_Click(object sender, EventArgs e)
         {
-            // Yetki kontrolü, veri bağlantısından önce yapılmalı
-            if (GirisEkrani.CurrentUserYetkiSeviyesi < 2)
-            {
-                MessageBox.Show("Bu işlemi gerçekleştirmek için yeterli yetkiniz yok.", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Fonksiyonu burada bitiriyoruz
-            }
-
             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
             try
             {
@@ -190,12 +158,12 @@ namespace ileri_seviye_depo_stoğu_projesi
 
                     // Sipariş bilgilerini çekme sorgusu
                     string query = @"
-            SELECT 
-                siparis_id AS 'Sipariş ID', 
-                musteri_id AS 'Müşteri ID', 
-                toplam_tutar AS 'Toplam Tutar', 
-                siparis_durumu AS 'Sipariş Durumu' 
-            FROM siparisler";
+                SELECT 
+                    siparis_id AS 'Sipariş ID', 
+                    musteri_id AS 'Müşteri ID', 
+                    toplam_tutar AS 'Toplam Tutar', 
+                    siparis_durumu AS 'Sipariş Durumu' 
+                FROM siparisler";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
@@ -203,37 +171,50 @@ namespace ileri_seviye_depo_stoğu_projesi
                         DataTable table = new DataTable();
                         adapter.Fill(table);
 
+                        // DataGridView'e veriyi bağla
+                        data_siparisBilgi.Columns.Clear(); // Eski sütunları temizle
                         data_siparisBilgi.DataSource = table;
 
-                        // Yetki seviyesine göre ayarlar
-                        if (GirisEkrani.CurrentUserYetkiSeviyesi == 2)
+                        // Onayla ve İptal Et butonları ekle
+                        AddButtonColumn("Onayla", "Onayla");
+                        AddButtonColumn("İptal Et", "İptal Et");
+
+                        // Sadece 3. seviye kullanıcılar için Düzenle butonu ekle
+                        if (GirisEkrani.CurrentUserYetkiSeviyesi == 3)
                         {
-                            data_siparisBilgi.ReadOnly = true; // Sadece görüntüleme
+                            AddButtonColumn("Düzenle", "Düzenle");
                         }
-                        else if (GirisEkrani.CurrentUserYetkiSeviyesi == 3)
-                        {
-                            data_siparisBilgi.ReadOnly = false; // Düzenleme yetkisi
-                        }
-                        if (!data_siparisBilgi.Columns.Contains("Onayla") && !data_siparisBilgi.Columns.Contains("İptal Et"))
-                        {
-                            AddButtonColumns(); // Eğer buton sütunları yoksa ekle
-                        }
-                        // Datagrid ayarları
+
+                        // DataGridView ayarları
                         data_siparisBilgi.AllowUserToAddRows = false;
                         data_siparisBilgi.AllowUserToDeleteRows = false;
-                        data_siparisBilgi.AllowUserToOrderColumns = false;
                         data_siparisBilgi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                        
                     }
                 }
             }
-            
             catch (Exception ex)
             {
                 MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+        }
 
+        private void AddButtonColumn(string name, string text)
+        {
+            // Eğer zaten eklenmişse tekrar ekleme
+            if (data_siparisBilgi.Columns.Contains(name))
+                return;
+
+            // Yeni bir buton sütunu oluştur
+            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn
+            {
+                Name = name,
+                HeaderText = text,
+                Text = text,
+                UseColumnTextForButtonValue = true
+            };
+
+            // DataGridView'e ekle
+            data_siparisBilgi.Columns.Add(buttonColumn);
         }
 
         private void UpdateSiparisDurumu(string siparisId, string yeniDurum)
@@ -245,44 +226,53 @@ namespace ileri_seviye_depo_stoğu_projesi
                 {
                     connection.Open();
 
-                    // Mevcut sipariş durumunu kontrol et
-                    string queryCheck = "SELECT siparis_durumu FROM siparisler WHERE siparis_id = @siparisId";
-                    using (MySqlCommand cmdCheck = new MySqlCommand(queryCheck, connection))
+                    // Siparişin mevcut durumunu kontrol et
+                    string checkQuery = "SELECT siparis_durumu FROM siparisler WHERE siparis_id = @siparisId";
+                    using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, connection))
                     {
-                        cmdCheck.Parameters.AddWithValue("@siparisId", siparisId);
-                        string mevcutDurum = cmdCheck.ExecuteScalar()?.ToString();
+                        checkCmd.Parameters.AddWithValue("@siparisId", siparisId);
+                        string currentStatus = checkCmd.ExecuteScalar()?.ToString();
 
-                        // Eğer mevcut durum "İptal" ise, "Tamamlandı" yapılamaz
-                        if (mevcutDurum == "Iptal" && yeniDurum == "Tamamlandi")
+                        // Mevcut durum kontrolleri
+                        if (currentStatus == yeniDurum)
                         {
-                            MessageBox.Show("İptal edilmiş bir sipariş tamamlandı olarak değiştirilemez.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show($"Sipariş zaten '{yeniDurum}' durumunda.", "Durum Güncelleme", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        else if (currentStatus == "Tamamlandi" || currentStatus == "Iptal")
+                        {
+                            MessageBox.Show($"Bu sipariş '{currentStatus}' durumunda ve artık değiştirilemez.", "Durum Güncelleme Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
 
-                        // Eğer mevcut durum "Tamamlandı" ise, "İptal" yapılamaz
-                        if (mevcutDurum == "Tamamlandi" && yeniDurum == "Iptal")
+                        // Güncelleme sorgusu
+                        string updateQuery = "UPDATE siparisler SET siparis_durumu = @yeniDurum WHERE siparis_id = @siparisId";
+                        using (MySqlCommand updateCmd = new MySqlCommand(updateQuery, connection))
                         {
-                            MessageBox.Show("Tamamlanmış bir sipariş iptal edilemez.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-                    }
+                            updateCmd.Parameters.AddWithValue("@yeniDurum", yeniDurum);
+                            updateCmd.Parameters.AddWithValue("@siparisId", siparisId);
 
-                    // Durum güncelleme sorgusu
-                    string queryUpdate = "UPDATE siparisler SET siparis_durumu = @yeniDurum WHERE siparis_id = @siparisId";
-                    using (MySqlCommand cmdUpdate = new MySqlCommand(queryUpdate, connection))
-                    {
-                        cmdUpdate.Parameters.AddWithValue("@yeniDurum", yeniDurum);
-                        cmdUpdate.Parameters.AddWithValue("@siparisId", siparisId);
+                            int rowsAffected = updateCmd.ExecuteNonQuery();
 
-                        int rowsAffected = cmdUpdate.ExecuteNonQuery();
-                        if (rowsAffected > 0)
-                        {
-                            MessageBox.Show("Sipariş durumu güncellendi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            LogIslem(siparisId, yeniDurum == "Tamamlandi" ? "Sipariş Onaylandı" : "Sipariş İptal Edildi");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Sipariş durumu güncellenemedi. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            if (rowsAffected > 0)
+                            {
+                                MessageBox.Show($"Sipariş durumu başarıyla '{yeniDurum}' olarak güncellendi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // Log kaydı ekle
+                                string logQuery = "INSERT INTO loglar (kullanici_id, islem_tarihi, tablo_adi, islem_tipi, detaylar) " +
+                                                  "VALUES (@kullaniciId, NOW(), 'siparisler', 'Durum Güncelleme', @detaylar)";
+                                using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection))
+                                {
+                                    logCmd.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
+                                    logCmd.Parameters.AddWithValue("@detaylar", $"Sipariş ID: {siparisId}, Yeni Durum: {yeniDurum}");
+                                    logCmd.ExecuteNonQuery();
+                                }
+
+                            }
+                            else
+                            {
+                                MessageBox.Show("Sipariş durumu güncellenemedi. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                         }
                     }
                 }
@@ -312,18 +302,22 @@ namespace ileri_seviye_depo_stoğu_projesi
                         return;
                     }
 
+                    // "Onayla" sütununa tıklandıysa
                     if (e.ColumnIndex == data_siparisBilgi.Columns["Onayla"].Index)
                     {
                         UpdateSiparisDurumu(siparisIdStr, "Tamamlandi");
                     }
+                    // "İptal Et" sütununa tıklandıysa
                     else if (e.ColumnIndex == data_siparisBilgi.Columns["İptal Et"].Index)
                     {
                         UpdateSiparisDurumu(siparisIdStr, "Iptal");
                     }
-                    // Düzenleme sütununa tıklandıysa
+                    // "Düzenle" sütununa tıklandıysa
                     else if (data_siparisBilgi.Columns[e.ColumnIndex].Name == "Düzenle" && GirisEkrani.CurrentUserYetkiSeviyesi == 3)
                     {
-                        MessageBox.Show($"Sipariş {siparisIdStr} düzenlenecek.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        int siparisId = Convert.ToInt32(siparisIdStr); // Sipariş ID'sini int'e çevir
+                        SiparisDuzenleForm duzenleForm = new SiparisDuzenleForm(siparisId); // Yeni formu oluştur
+                        duzenleForm.ShowDialog(); // Formu göster
                     }
                 }
             }
@@ -333,9 +327,11 @@ namespace ileri_seviye_depo_stoğu_projesi
             }
         }
 
+
+
         private void data_siparisBilgi_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            // Eğer kullanıcı 3. seviye yetkiye sahipse düzenleme yapılabilir
+            // Sadece 3. seviyedeki kullanıcılar düzenleme yapabilir
             if (GirisEkrani.CurrentUserYetkiSeviyesi != 3)
             {
                 MessageBox.Show("Bu işlemi gerçekleştirme yetkiniz yok.", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -344,43 +340,54 @@ namespace ileri_seviye_depo_stoğu_projesi
 
             try
             {
-                string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
+                int rowIndex = e.RowIndex;
+                int columnIndex = e.ColumnIndex;
 
-                    // Düzenlenen hücreye ait bilgileri al
-                    int rowIndex = e.RowIndex;
-                    string columnName = data_siparisBilgi.Columns[e.ColumnIndex].Name;
-                    string newValue = data_siparisBilgi.Rows[rowIndex].Cells[e.ColumnIndex].Value?.ToString();
-                    string siparisId = data_siparisBilgi.Rows[rowIndex].Cells["siparis_id"].Value?.ToString();
+                // Hücrelerin doğru veri içerdiğinden emin olun
+                if (rowIndex >= 0 && columnIndex >= 0)
+                {
+                    string columnName = data_siparisBilgi.Columns[columnIndex].Name;
+                    string newValue = data_siparisBilgi.Rows[rowIndex].Cells[columnIndex].Value?.ToString();
+                    string siparisId = data_siparisBilgi.Rows[rowIndex].Cells["Sipariş ID"].Value?.ToString();
 
                     if (!string.IsNullOrEmpty(newValue) && !string.IsNullOrEmpty(siparisId))
                     {
-                        // SQL sorgusu: ilgili sütunu güncelle
-                        string updateQuery = $"UPDATE siparisler SET {columnName} = @newValue WHERE siparis_id = @siparisId";
-
-                        using (MySqlCommand cmd = new MySqlCommand(updateQuery, connection))
+                        // Veritabanında düzenlemeyi uygula
+                        string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+                        using (MySqlConnection connection = new MySqlConnection(connectionString))
                         {
-                            cmd.Parameters.AddWithValue("@newValue", newValue);
-                            cmd.Parameters.AddWithValue("@siparisId", siparisId);
+                            connection.Open();
 
-                            int rowsAffected = cmd.ExecuteNonQuery();
-                            if (rowsAffected > 0)
+                            string updateQuery = $"UPDATE siparisler SET {columnName} = @newValue WHERE siparis_id = @siparisId";
+                            using (MySqlCommand cmd = new MySqlCommand(updateQuery, connection))
                             {
-                                MessageBox.Show("Veri başarıyla güncellendi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Veri güncellenemedi. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                cmd.Parameters.AddWithValue("@newValue", newValue);
+                                cmd.Parameters.AddWithValue("@siparisId", siparisId);
+
+                                int rowsAffected = cmd.ExecuteNonQuery();
+                                if (rowsAffected > 0)
+                                {
+                                    MessageBox.Show($"Veri başarıyla güncellendi. Kolon: {columnName}, Yeni Değer: {newValue}", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                    // Loglama işlemi
+                                    LogIslem(siparisId, $"'{columnName}' kolonunda değer '{newValue}' olarak güncellendi.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Veri güncellenemedi. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
                             }
                         }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Eksik bilgi var. Düzenleme yapılamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void LogIslem(string siparisId, string durum)
@@ -394,9 +401,10 @@ namespace ileri_seviye_depo_stoğu_projesi
                     string query = "INSERT INTO loglar (kullanici_id, islem_tipi, detaylar, islem_tarihi) VALUES (@kullaniciId, @islemTipi, @detaylar, NOW())";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
+                        string detaylar = $"Sipariş {siparisId} durumu {durum} olarak güncellendi.";
                         cmd.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
-                        cmd.Parameters.AddWithValue("@islemTipi", durum.Length > 50 ? durum.Substring(0, 50) : durum); // 50 karakter sınırı koy
-                        cmd.Parameters.AddWithValue("@detaylar", $"Sipariş {siparisId} durumu {durum} olarak güncellendi.");
+                        cmd.Parameters.AddWithValue("@islemTipi", durum.Length > 50 ? durum.Substring(0, 50) : durum);
+                        cmd.Parameters.AddWithValue("@detaylar", detaylar.Length > 255 ? detaylar.Substring(0, 255) : detaylar);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -404,6 +412,69 @@ namespace ileri_seviye_depo_stoğu_projesi
             catch (Exception ex)
             {
                 MessageBox.Show($"Loglama sırasında bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btn_geri_Click(object sender, EventArgs e)
+        {
+            GirisEkrani geri = new GirisEkrani();
+            geri.Show();
+            this.Close();
+        }
+
+        private void btn_musteriVeri_Click(object sender, EventArgs e)
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Müşteri bilgilerini çekme sorgusu
+                    string query = @"
+                SELECT 
+                    musteri_id AS 'Müşteri ID',
+                    kullanici_id AS 'Kullanıcı ID',
+                    borc_durumu AS 'Borç Durumu',
+                    toplam_alacak AS 'Toplam Alacak',
+                    hesap_durumu AS 'Hesap Durumu',
+                    telefon AS 'Telefon',
+                    eposta AS 'E-posta',
+                    adres AS 'Adres',
+                    kayit_tarihi AS 'Kayıt Tarihi'
+                FROM musteriler";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        DataTable table = new DataTable();
+                        adapter.Fill(table);
+
+                        // Veri var mı kontrol et
+                        if (table.Rows.Count == 0)
+                        {
+                            MessageBox.Show("Hiçbir müşteri bulunamadı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+
+                        // DataGridView'e veriyi bağla
+                        data_musteriBilgi.Columns.Clear(); // Eski sütunları temizle
+                        data_musteriBilgi.DataSource = table;
+
+                        // Düzenle butonunu ekle
+                        AddButtonColumn("Düzenle", "Düzenle");
+
+                        // DataGridView ayarları
+                        data_musteriBilgi.AllowUserToAddRows = false;
+                        data_musteriBilgi.AllowUserToDeleteRows = false;
+                        data_musteriBilgi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
