@@ -79,11 +79,18 @@ namespace ileri_seviye_depo_stoğu_projesi
                 {
                     connection.Open();
 
+                    // Decimal doğrulama ve dönüştürme
+                    if (!decimal.TryParse(txtToplamTutar.Text.Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal toplamTutar))
+                    {
+                        MessageBox.Show("Toplam Tutar geçerli bir sayı değil.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     string query = "UPDATE siparisler SET musteri_id = @musteriId, toplam_tutar = @toplamTutar, siparis_durumu = @siparisDurumu WHERE siparis_id = @siparisId";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        cmd.Parameters.AddWithValue("@musteriId", txtMusteriId.Text);
-                        cmd.Parameters.AddWithValue("@toplamTutar", txtToplamTutar.Text);
+                        cmd.Parameters.AddWithValue("@musteriId", txtMusteriId.Text.Trim());
+                        cmd.Parameters.AddWithValue("@toplamTutar", toplamTutar); // Decimal olarak ekleniyor
                         cmd.Parameters.AddWithValue("@siparisDurumu", cmbSiparisDurumu.SelectedItem.ToString());
                         cmd.Parameters.AddWithValue("@siparisId", siparisId);
 

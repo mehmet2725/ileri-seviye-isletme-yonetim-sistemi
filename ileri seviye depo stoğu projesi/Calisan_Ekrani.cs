@@ -370,7 +370,11 @@ namespace ileri_seviye_depo_stoğu_projesi
                                     MessageBox.Show($"Veri başarıyla güncellendi. Kolon: {columnName}, Yeni Değer: {newValue}", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                                     // Loglama işlemi
-                                    LogIslem(siparisId, $"'{columnName}' kolonunda değer '{newValue}' olarak güncellendi.");
+                                    int kullaniciId = GirisEkrani.CurrentUserId; // Giriş yapan kullanıcının ID'si
+                                    string islemTipi = "Düzenleme"; // İşlem tipi
+                                    string detaylar = $"{columnName} kolonunda değer {newValue} olarak güncellendi."; // Detay
+
+                                    Calisan_Ekrani.LogIslem(kullaniciId, islemTipi, detaylar);
                                 }
                                 else
                                 {
@@ -390,7 +394,8 @@ namespace ileri_seviye_depo_stoğu_projesi
                 MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void LogIslem(string siparisId, string durum)
+
+        public static void LogIslem(int kullaniciId, string islemTipi, string detaylar)
         {
             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
             try
@@ -401,9 +406,8 @@ namespace ileri_seviye_depo_stoğu_projesi
                     string query = "INSERT INTO loglar (kullanici_id, islem_tipi, detaylar, islem_tarihi) VALUES (@kullaniciId, @islemTipi, @detaylar, NOW())";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        string detaylar = $"Sipariş {siparisId} durumu {durum} olarak güncellendi.";
-                        cmd.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
-                        cmd.Parameters.AddWithValue("@islemTipi", durum.Length > 50 ? durum.Substring(0, 50) : durum);
+                        cmd.Parameters.AddWithValue("@kullaniciId", kullaniciId);
+                        cmd.Parameters.AddWithValue("@islemTipi", islemTipi.Length > 100 ? islemTipi.Substring(0, 100) : islemTipi);
                         cmd.Parameters.AddWithValue("@detaylar", detaylar.Length > 255 ? detaylar.Substring(0, 255) : detaylar);
                         cmd.ExecuteNonQuery();
                     }
@@ -415,11 +419,33 @@ namespace ileri_seviye_depo_stoğu_projesi
             }
         }
 
+
+
+
         private void btn_geri_Click(object sender, EventArgs e)
         {
             GirisEkrani geri = new GirisEkrani();
             geri.Show();
             this.Close();
+        }
+
+        private void AddButtonColumnForMusteri(string name, string text)
+        {
+            // Eğer buton zaten eklenmişse tekrar ekleme
+            if (data_musteriBilgi.Columns.Contains(name))
+                return;
+
+            // Yeni bir buton sütunu oluştur
+            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn
+            {
+                Name = name,
+                HeaderText = text,
+                Text = text,
+                UseColumnTextForButtonValue = true
+            };
+
+            // data_musteriBilgi'ye ekle
+            data_musteriBilgi.Columns.Add(buttonColumn);
         }
 
         private void btn_musteriVeri_Click(object sender, EventArgs e)
@@ -433,17 +459,16 @@ namespace ileri_seviye_depo_stoğu_projesi
 
                     // Müşteri bilgilerini çekme sorgusu
                     string query = @"
-                SELECT 
-                    musteri_id AS 'Müşteri ID',
-                    kullanici_id AS 'Kullanıcı ID',
-                    borc_durumu AS 'Borç Durumu',
-                    toplam_alacak AS 'Toplam Alacak',
-                    hesap_durumu AS 'Hesap Durumu',
-                    telefon AS 'Telefon',
-                    eposta AS 'E-posta',
-                    adres AS 'Adres',
-                    kayit_tarihi AS 'Kayıt Tarihi'
-                FROM musteriler";
+            SELECT 
+                musteri_id AS 'Müşteri ID',
+                borc_durumu AS 'Borç Durumu',
+                toplam_alacak AS 'Toplam Alacak',
+                hesap_durumu AS 'Hesap Durumu',
+                telefon AS 'Telefon',
+                eposta AS 'E-Posta',
+                adres AS 'Adres',
+                kayit_tarihi AS 'Kayıt Tarihi'
+            FROM musteriler";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
@@ -451,24 +476,87 @@ namespace ileri_seviye_depo_stoğu_projesi
                         DataTable table = new DataTable();
                         adapter.Fill(table);
 
-                        // Veri var mı kontrol et
-                        if (table.Rows.Count == 0)
+                        // DataGridView'e veriyi bağla
+                        data_musteriBilgi.DataSource = table;
+
+                        // Buton sütunlarını ekle
+                        AddButtonColumnForMusteri("Düzenle", "Düzenle");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void data_musteriBilgi_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                // Tıklanan satır ve sütunun geçerli olup olmadığını kontrol et
+                int rowIndex = e.RowIndex;
+
+                if (rowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    DataGridViewRow selectedRow = data_musteriBilgi.Rows[rowIndex];
+                    string musteriIdStr = selectedRow.Cells["Müşteri ID"].Value?.ToString();
+
+                    // "Düzenle" sütununa tıklandıysa
+                    if (data_musteriBilgi.Columns[e.ColumnIndex].Name == "Düzenle")
+                    {
+                        if (string.IsNullOrEmpty(musteriIdStr))
                         {
-                            MessageBox.Show("Hiçbir müşteri bulunamadı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Müşteri ID alınamadı. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
 
-                        // DataGridView'e veriyi bağla
-                        data_musteriBilgi.Columns.Clear(); // Eski sütunları temizle
-                        data_musteriBilgi.DataSource = table;
+                        int musteriId = Convert.ToInt32(musteriIdStr);
 
-                        // Düzenle butonunu ekle
-                        AddButtonColumn("Düzenle", "Düzenle");
+                        // Yeni formu aç ve müşteri ID'yi gönder
+                        MusteriBilgiDuzenle musteriDuzenleForm = new MusteriBilgiDuzenle(musteriId);
+                        musteriDuzenleForm.ShowDialog(); // Formu modal olarak aç
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btn_StokBilgileri_Click(object sender, EventArgs e)
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Veritabanından stok bilgilerini çek
+                    string query = "SELECT urun_id AS 'Ürün ID', urun_adi AS 'Ürün Adı', stok_miktari AS 'Stok Miktarı', fiyat AS 'Fiyat', eklenme_tarihi AS 'Eklenme Tarihi', guncellenme_tarihi AS 'Güncellenme Tarihi' FROM urunler";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                        DataTable table = new DataTable();
+                        adapter.Fill(table);
+
+                        // Veri tablosunu DataGridView'e bağla
+                        data_stokBilgi.DataSource = table;
+
+                        // DataGridView'deki sütunları düzenle
+                        data_stokBilgi.Columns["Ürün ID"].ReadOnly = true; // Ürün ID değiştirilemez
+                        data_stokBilgi.Columns["Eklenme Tarihi"].ReadOnly = true; // Eklenme Tarihi değiştirilemez
+                        data_stokBilgi.Columns["Güncellenme Tarihi"].ReadOnly = true; // Güncellenme Tarihi değiştirilemez
+
+                        // Butonları ekle
+                        AddStokButtons();
 
                         // DataGridView ayarları
-                        data_musteriBilgi.AllowUserToAddRows = false;
-                        data_musteriBilgi.AllowUserToDeleteRows = false;
-                        data_musteriBilgi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        data_stokBilgi.AllowUserToAddRows = false; // Yeni satır eklenemez
+                        data_stokBilgi.AllowUserToDeleteRows = false; // Satır silinemez
+                        data_stokBilgi.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Tüm satır seçilir
                     }
                 }
             }
@@ -477,5 +565,136 @@ namespace ileri_seviye_depo_stoğu_projesi
                 MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void UpdateStokBilgisi(string urunId, string yeniStok, string yeniFiyat)
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "UPDATE urunler SET stok_miktari = @yeniStok, fiyat = @yeniFiyat, guncellenme_tarihi = NOW() WHERE urun_id = @urunId";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@yeniStok", yeniStok);
+                        cmd.Parameters.AddWithValue("@yeniFiyat", yeniFiyat);
+                        cmd.Parameters.AddWithValue("@urunId", urunId);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadStokBilgileri()
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT urun_id AS 'Ürün ID', urun_adi AS 'Ürün Adı', stok_miktari AS 'Stok Miktarı', fiyat AS 'Fiyat', eklenme_tarihi AS 'Eklenme Tarihi', guncellenme_tarihi AS 'Güncellenme Tarihi' FROM urunler";
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
+                    {
+                        DataTable table = new DataTable();
+                        adapter.Fill(table);
+                        data_stokBilgi.DataSource = table;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Stok bilgileri yüklenemedi: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void data_stokBilgi_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                int rowIndex = e.RowIndex;
+
+                if (rowIndex >= 0 && e.ColumnIndex >= 0) // Tıklanan hücre veri hücresiyse
+                {
+                    DataGridViewRow selectedRow = data_stokBilgi.Rows[rowIndex];
+                    string urunId = selectedRow.Cells["Ürün ID"].Value?.ToString();
+
+                    if (string.IsNullOrEmpty(urunId))
+                    {
+                        MessageBox.Show("Ürün ID alınamadı. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // "Onayla" butonuna tıklandıysa
+                    if (data_stokBilgi.Columns[e.ColumnIndex].Name == "Onayla")
+                    {
+                        string yeniStok = selectedRow.Cells["Stok Miktarı"].Value?.ToString();
+                        string yeniFiyat = selectedRow.Cells["Fiyat"].Value?.ToString();
+
+                        if (!string.IsNullOrEmpty(yeniStok) && !string.IsNullOrEmpty(yeniFiyat))
+                        {
+                            // Veritabanına güncelleme işlemi
+                            UpdateStokBilgisi(urunId, yeniStok, yeniFiyat);
+
+                            // Log kaydı
+                            LogIslem(GirisEkrani.CurrentUserId, "Stok Düzenleme", $"Ürün ID: {urunId}, Yeni Stok: {yeniStok}, Yeni Fiyat: {yeniFiyat}");
+
+                            MessageBox.Show("Düzenlemeler başarıyla kaydedildi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Geçerli değerler girilmedi. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+
+                    // "İptal" butonuna tıklandıysa
+                    else if (data_stokBilgi.Columns[e.ColumnIndex].Name == "İptal")
+                    {
+                        LoadStokBilgileri(); // Orijinal veriyi tekrar yükle
+                        MessageBox.Show("Düzenlemeler iptal edildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void AddButtonColumnForStok(string name, string text)
+        {
+            // Eğer buton zaten eklenmişse tekrar ekleme
+            if (data_stokBilgi.Columns.Contains(name))
+                return;
+
+            // Yeni bir buton sütunu oluştur
+            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn
+            {
+                Name = name,
+                HeaderText = text,
+                Text = text,
+                UseColumnTextForButtonValue = true
+            };
+
+            // DataGridView'e ekle
+            data_stokBilgi.Columns.Add(buttonColumn);
+        }
+
+        // Butonları eklemek için:
+        private void AddStokButtons()
+        {
+            AddButtonColumnForStok("Düzenle", "Düzenle");
+            AddButtonColumnForStok("Onayla", "Onayla");
+            AddButtonColumnForStok("İptal", "İptal");
+        }
+
     }
 }

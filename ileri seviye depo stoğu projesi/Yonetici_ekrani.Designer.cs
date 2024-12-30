@@ -76,8 +76,8 @@
             label12 = new Label();
             label11 = new Label();
             label10 = new Label();
-            btn_geri = new Button();
             tab_siparisOlustur = new TabPage();
+            btn_geri = new Button();
             tabcontrol.SuspendLayout();
             tab_calisanYonetim.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)data_vardiyaIzin).BeginInit();
@@ -374,7 +374,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            label8.Location = new Point(74, 65);
+            label8.Location = new Point(74, 69);
             label8.Name = "label8";
             label8.Size = new Size(318, 25);
             label8.TabIndex = 4;
@@ -593,16 +593,6 @@
             label10.TabIndex = 0;
             label10.Text = "Kullanıcı Adı";
             // 
-            // btn_geri
-            // 
-            btn_geri.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
-            btn_geri.Location = new Point(12, 12);
-            btn_geri.Name = "btn_geri";
-            btn_geri.Size = new Size(85, 37);
-            btn_geri.TabIndex = 8;
-            btn_geri.Text = "Geri";
-            btn_geri.UseVisualStyleBackColor = true;
-            // 
             // tab_siparisOlustur
             // 
             tab_siparisOlustur.Location = new Point(4, 24);
@@ -612,6 +602,16 @@
             tab_siparisOlustur.TabIndex = 7;
             tab_siparisOlustur.Text = "Sipariş Oluştur";
             tab_siparisOlustur.UseVisualStyleBackColor = true;
+            // 
+            // btn_geri
+            // 
+            btn_geri.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold);
+            btn_geri.Location = new Point(12, 12);
+            btn_geri.Name = "btn_geri";
+            btn_geri.Size = new Size(85, 37);
+            btn_geri.TabIndex = 8;
+            btn_geri.Text = "Geri";
+            btn_geri.UseVisualStyleBackColor = true;
             // 
             // Yonetici_ekrani
             // 

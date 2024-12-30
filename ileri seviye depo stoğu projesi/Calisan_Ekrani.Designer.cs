@@ -52,17 +52,18 @@
             // data_stokBilgi
             // 
             data_stokBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_stokBilgi.Location = new Point(701, 500);
+            data_stokBilgi.Location = new Point(735, 511);
             data_stokBilgi.Name = "data_stokBilgi";
-            data_stokBilgi.Size = new Size(311, 238);
+            data_stokBilgi.Size = new Size(549, 337);
             data_stokBilgi.TabIndex = 0;
+            data_stokBilgi.CellClick += data_stokBilgi_CellClick;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            label1.Location = new Point(701, 436);
+            label1.Location = new Point(735, 478);
             label1.Name = "label1";
             label1.Size = new Size(142, 30);
             label1.TabIndex = 1;
@@ -74,7 +75,7 @@
             label3.BackColor = Color.Transparent;
             label3.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             label3.ForeColor = SystemColors.ActiveCaption;
-            label3.Location = new Point(701, 75);
+            label3.Location = new Point(735, 52);
             label3.Name = "label3";
             label3.Size = new Size(171, 30);
             label3.TabIndex = 6;
@@ -83,17 +84,18 @@
             // data_musteriBilgi
             // 
             data_musteriBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_musteriBilgi.Location = new Point(689, 122);
+            data_musteriBilgi.Location = new Point(735, 105);
             data_musteriBilgi.Name = "data_musteriBilgi";
-            data_musteriBilgi.Size = new Size(323, 238);
+            data_musteriBilgi.Size = new Size(549, 296);
             data_musteriBilgi.TabIndex = 5;
+            data_musteriBilgi.CellClick += data_musteriBilgi_CellClick;
             // 
             // data_siparisBilgi
             // 
             data_siparisBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_siparisBilgi.Location = new Point(146, 500);
+            data_siparisBilgi.Location = new Point(142, 511);
             data_siparisBilgi.Name = "data_siparisBilgi";
-            data_siparisBilgi.Size = new Size(408, 238);
+            data_siparisBilgi.Size = new Size(446, 337);
             data_siparisBilgi.TabIndex = 7;
             data_siparisBilgi.CellClick += data_siparisBilgi_CellClick;
             data_siparisBilgi.CellEndEdit += data_siparisBilgi_CellEndEdit;
@@ -104,7 +106,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             label2.ForeColor = SystemColors.ActiveCaption;
-            label2.Location = new Point(189, 436);
+            label2.Location = new Point(142, 478);
             label2.Name = "label2";
             label2.Size = new Size(160, 30);
             label2.TabIndex = 6;
@@ -113,9 +115,9 @@
             // data_vardiyaSaat
             // 
             data_vardiyaSaat.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            data_vardiyaSaat.Location = new Point(160, 122);
+            data_vardiyaSaat.Location = new Point(160, 105);
             data_vardiyaSaat.Name = "data_vardiyaSaat";
-            data_vardiyaSaat.Size = new Size(377, 238);
+            data_vardiyaSaat.Size = new Size(423, 296);
             data_vardiyaSaat.TabIndex = 5;
             data_vardiyaSaat.CellClick += data_vardiyaSaat_CellClick;
             // 
@@ -125,7 +127,7 @@
             label4.BackColor = Color.Transparent;
             label4.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
             label4.ForeColor = SystemColors.ActiveCaption;
-            label4.Location = new Point(189, 75);
+            label4.Location = new Point(160, 52);
             label4.Name = "label4";
             label4.Size = new Size(341, 30);
             label4.TabIndex = 6;
@@ -135,7 +137,7 @@
             // 
             btn_calismaVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
             btn_calismaVeri.ForeColor = Color.Black;
-            btn_calismaVeri.Location = new Point(12, 122);
+            btn_calismaVeri.Location = new Point(12, 105);
             btn_calismaVeri.Name = "btn_calismaVeri";
             btn_calismaVeri.Size = new Size(142, 60);
             btn_calismaVeri.TabIndex = 8;
@@ -147,7 +149,7 @@
             // 
             btn_SiparisBilgileri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
             btn_SiparisBilgileri.ForeColor = Color.Black;
-            btn_SiparisBilgileri.Location = new Point(12, 500);
+            btn_SiparisBilgileri.Location = new Point(12, 511);
             btn_SiparisBilgileri.Name = "btn_SiparisBilgileri";
             btn_SiparisBilgileri.Size = new Size(128, 59);
             btn_SiparisBilgileri.TabIndex = 9;
@@ -159,7 +161,7 @@
             // 
             btn_musteriVeri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
             btn_musteriVeri.ForeColor = Color.Black;
-            btn_musteriVeri.Location = new Point(543, 122);
+            btn_musteriVeri.Location = new Point(594, 105);
             btn_musteriVeri.Name = "btn_musteriVeri";
             btn_musteriVeri.Size = new Size(140, 60);
             btn_musteriVeri.TabIndex = 10;
@@ -171,12 +173,13 @@
             // 
             btn_StokBilgileri.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 162);
             btn_StokBilgileri.ForeColor = Color.Black;
-            btn_StokBilgileri.Location = new Point(560, 500);
+            btn_StokBilgileri.Location = new Point(599, 511);
             btn_StokBilgileri.Name = "btn_StokBilgileri";
             btn_StokBilgileri.Size = new Size(135, 59);
             btn_StokBilgileri.TabIndex = 11;
             btn_StokBilgileri.Text = "Stok Bilgilerini Çek";
             btn_StokBilgileri.UseVisualStyleBackColor = true;
+            btn_StokBilgileri.Click += btn_StokBilgileri_Click;
             // 
             // btn_geri
             // 
@@ -207,8 +210,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            BackgroundImageLayout = ImageLayout.None;
-            ClientSize = new Size(1021, 769);
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(1306, 903);
             Controls.Add(lblYetkiSeviyesi);
             Controls.Add(btn_geri);
             Controls.Add(btn_StokBilgileri);

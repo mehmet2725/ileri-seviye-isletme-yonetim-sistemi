@@ -42,6 +42,8 @@
             txtToplamAlacak = new TextBox();
             btnKaydet = new Button();
             btnIptal = new Button();
+            label7 = new Label();
+            chkHesapDurumu = new CheckBox();
             SuspendLayout();
             // 
             // label1
@@ -150,7 +152,7 @@
             // 
             btnKaydet.BackColor = Color.FromArgb(0, 192, 0);
             btnKaydet.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btnKaydet.Location = new Point(280, 329);
+            btnKaydet.Location = new Point(280, 350);
             btnKaydet.Name = "btnKaydet";
             btnKaydet.Size = new Size(116, 54);
             btnKaydet.TabIndex = 2;
@@ -162,7 +164,7 @@
             // 
             btnIptal.BackColor = Color.Red;
             btnIptal.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 162);
-            btnIptal.Location = new Point(422, 329);
+            btnIptal.Location = new Point(424, 350);
             btnIptal.Name = "btnIptal";
             btnIptal.Size = new Size(116, 54);
             btnIptal.TabIndex = 2;
@@ -170,11 +172,32 @@
             btnIptal.UseVisualStyleBackColor = false;
             btnIptal.Click += btnIptal_Click;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold);
+            label7.Location = new Point(31, 322);
+            label7.Name = "label7";
+            label7.Size = new Size(147, 25);
+            label7.TabIndex = 0;
+            label7.Text = "Hesap Durumu";
+            // 
+            // chkHesapDurumu
+            // 
+            chkHesapDurumu.AutoSize = true;
+            chkHesapDurumu.Location = new Point(202, 325);
+            chkHesapDurumu.Name = "chkHesapDurumu";
+            chkHesapDurumu.Size = new Size(103, 19);
+            chkHesapDurumu.TabIndex = 3;
+            chkHesapDurumu.Text = "hesap durumu";
+            chkHesapDurumu.UseVisualStyleBackColor = true;
+            // 
             // MusteriBilgiDuzenle
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(chkHesapDurumu);
             Controls.Add(btnIptal);
             Controls.Add(btnKaydet);
             Controls.Add(txtToplamAlacak);
@@ -183,6 +206,7 @@
             Controls.Add(txtEposta);
             Controls.Add(txtTelefon);
             Controls.Add(txtAdSoyad);
+            Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(label5);
             Controls.Add(label4);
@@ -212,5 +236,7 @@
         private TextBox txtToplamAlacak;
         private Button btnKaydet;
         private Button btnIptal;
+        private Label label7;
+        private CheckBox chkHesapDurumu;
     }
 }
