@@ -49,42 +49,48 @@ namespace ileri_seviye_depo_stoğu_projesi
                         command.Parameters.AddWithValue("@kullaniciAdi", kullaniciAdi);
                         command.Parameters.AddWithValue("@sifre", sifre);
 
-                        // Reader ile veriyi okuyoruz
                         using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                // Giriş başarılı, kullanıcı ID'sini alıyoruz
                                 CurrentUserId = reader.GetInt32("kullanici_id");
-                                MessageBox.Show($"CurrentUserId Giriş Ekranında: {CurrentUserId}", "Debug");
                                 string rol = reader.GetString("rol");
+                                reader.Close();
 
-                                reader.Close(); // DataReader'ı kapatıyoruz, yeni bir işlem için bağlantıyı serbest bırakıyoruz
-                                // Yetki seviyesi sorgusunu burada ekliyoruz
-                                string yetkiSeviyesiQuery = "SELECT yetki_seviyesi FROM calisanlar WHERE kullanici_id = @kullaniciId";
-                                using (MySqlCommand yetkiCmd = new MySqlCommand(yetkiSeviyesiQuery, connection))
+                                // Çalışanlar için yetki seviyesi kontrolü
+                                if (rol == "Calisan")
                                 {
-                                    yetkiCmd.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
-                                    object yetkiSeviyesiResult = yetkiCmd.ExecuteScalar();
+                                    string yetkiSeviyesiQuery = "SELECT yetki_seviyesi FROM calisanlar WHERE kullanici_id = @kullaniciId";
+                                    using (MySqlCommand yetkiCmd = new MySqlCommand(yetkiSeviyesiQuery, connection))
+                                    {
+                                        yetkiCmd.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
+                                        object yetkiSeviyesiResult = yetkiCmd.ExecuteScalar();
 
-                                    if (yetkiSeviyesiResult != null)
-                                    {
-                                        CurrentUserYetkiSeviyesi = Convert.ToInt32(yetkiSeviyesiResult);
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Yetki seviyesi alınamadı. Sistem yöneticisine başvurun.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
+                                        if (yetkiSeviyesiResult != null)
+                                        {
+                                            CurrentUserYetkiSeviyesi = Convert.ToInt32(yetkiSeviyesiResult);
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Yetki seviyesi alınamadı. Sistem yöneticisine başvurun.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            return;
+                                        }
                                     }
                                 }
 
                                 // Rol kontrolü ve ekran yönlendirme
                                 if (rol == "Yonetici")
+                                {
                                     new Yonetici_ekrani().Show();
+                                }
                                 else if (rol == "Calisan")
+                                {
                                     new Calisan_Ekrani().Show();
+                                }
                                 else if (rol == "Musteri")
+                                {
                                     new MusteriEkrani(CurrentUserId).Show();
+                                }
 
                                 this.Hide();
                             }
@@ -96,12 +102,11 @@ namespace ileri_seviye_depo_stoğu_projesi
                                 txt_kulAd.Focus();
                                 return;
                             }
-
                         }
                     }
                 }
 
-                // Log kaydı için **yeni bağlantı** oluşturuyoruz
+                // Log kaydı
                 using (MySqlConnection logConnection = new MySqlConnection(connectionString))
                 {
                     logConnection.Open();

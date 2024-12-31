@@ -617,54 +617,25 @@ namespace ileri_seviye_depo_stoğu_projesi
 
         private void data_stokBilgi_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            try
+            if (e.RowIndex >= 0 && data_stokBilgi.Columns[e.ColumnIndex].Name == "Düzenle")
             {
-                int rowIndex = e.RowIndex;
+                DataGridViewRow selectedRow = data_stokBilgi.Rows[e.RowIndex];
+                string urunId = selectedRow.Cells["Ürün ID"].Value?.ToString();
+                string urunAdi = selectedRow.Cells["Ürün Adı"].Value?.ToString();
+                string stokMiktari = selectedRow.Cells["Stok Miktarı"].Value?.ToString();
+                string fiyat = selectedRow.Cells["Fiyat"].Value?.ToString();
+                string sonGuncelleme = selectedRow.Cells["Güncellenme Tarihi"].Value?.ToString();
 
-                if (rowIndex >= 0 && e.ColumnIndex >= 0) // Tıklanan hücre veri hücresiyse
+                if (!string.IsNullOrEmpty(urunId))
                 {
-                    DataGridViewRow selectedRow = data_stokBilgi.Rows[rowIndex];
-                    string urunId = selectedRow.Cells["Ürün ID"].Value?.ToString();
-
-                    if (string.IsNullOrEmpty(urunId))
-                    {
-                        MessageBox.Show("Ürün ID alınamadı. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    // "Onayla" butonuna tıklandıysa
-                    if (data_stokBilgi.Columns[e.ColumnIndex].Name == "Onayla")
-                    {
-                        string yeniStok = selectedRow.Cells["Stok Miktarı"].Value?.ToString();
-                        string yeniFiyat = selectedRow.Cells["Fiyat"].Value?.ToString();
-
-                        if (!string.IsNullOrEmpty(yeniStok) && !string.IsNullOrEmpty(yeniFiyat))
-                        {
-                            // Veritabanına güncelleme işlemi
-                            UpdateStokBilgisi(urunId, yeniStok, yeniFiyat);
-
-                            // Log kaydı
-                            LogIslem(GirisEkrani.CurrentUserId, "Stok Düzenleme", $"Ürün ID: {urunId}, Yeni Stok: {yeniStok}, Yeni Fiyat: {yeniFiyat}");
-
-                            MessageBox.Show("Düzenlemeler başarıyla kaydedildi.", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Geçerli değerler girilmedi. Lütfen tekrar deneyin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-
-                    // "İptal" butonuna tıklandıysa
-                    else if (data_stokBilgi.Columns[e.ColumnIndex].Name == "İptal")
-                    {
-                        LoadStokBilgileri(); // Orijinal veriyi tekrar yükle
-                        MessageBox.Show("Düzenlemeler iptal edildi.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    // StokDuzenle formuna bilgileri gönder
+                    StokDuzenle stokDuzenleForm = new StokDuzenle(urunId, urunAdi, stokMiktari, fiyat, sonGuncelleme);
+                    stokDuzenleForm.ShowDialog();
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    MessageBox.Show("Lütfen düzenlemek için bir ürün seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
 
         }
@@ -696,5 +667,31 @@ namespace ileri_seviye_depo_stoğu_projesi
             AddButtonColumnForStok("İptal", "İptal");
         }
 
+        private void btn_siparisEkle_Click(object sender, EventArgs e)
+        {
+            if (GirisEkrani.CurrentUserYetkiSeviyesi < 2)
+            {
+                MessageBox.Show("Bu işlemi gerçekleştirmek için yetkiniz yok.", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // SiparisEkle formunu aç
+            SiparisEkle siparisEkleForm = new SiparisEkle();
+            siparisEkleForm.ShowDialog();
+        }
+
+        private void btn_stokDuzenle_Click(object sender, EventArgs e)
+        {
+            // Yetki kontrolü
+            if (GirisEkrani.CurrentUserYetkiSeviyesi < 2)
+            {
+                MessageBox.Show("Bu işlemi gerçekleştirmek için yetkiniz yok.", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Yeni ürün ekleme için boş form
+            StokDuzenle stokDuzenleForm = new StokDuzenle("", "", "", "", DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"));
+            stokDuzenleForm.ShowDialog();
+        }
     }
 }

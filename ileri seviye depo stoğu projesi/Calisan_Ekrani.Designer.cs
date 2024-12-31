@@ -43,6 +43,10 @@
             btn_StokBilgileri = new Button();
             btn_geri = new Button();
             lblYetkiSeviyesi = new Label();
+            label5 = new Label();
+            btn_siparisEkle = new Button();
+            label6 = new Label();
+            btn_stokDuzenle = new Button();
             ((System.ComponentModel.ISupportInitialize)data_stokBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_musteriBilgi).BeginInit();
             ((System.ComponentModel.ISupportInitialize)data_siparisBilgi).BeginInit();
@@ -54,7 +58,7 @@
             data_stokBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             data_stokBilgi.Location = new Point(735, 511);
             data_stokBilgi.Name = "data_stokBilgi";
-            data_stokBilgi.Size = new Size(549, 337);
+            data_stokBilgi.Size = new Size(549, 285);
             data_stokBilgi.TabIndex = 0;
             data_stokBilgi.CellClick += data_stokBilgi_CellClick;
             // 
@@ -95,7 +99,7 @@
             data_siparisBilgi.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             data_siparisBilgi.Location = new Point(142, 511);
             data_siparisBilgi.Name = "data_siparisBilgi";
-            data_siparisBilgi.Size = new Size(446, 337);
+            data_siparisBilgi.Size = new Size(446, 285);
             data_siparisBilgi.TabIndex = 7;
             data_siparisBilgi.CellClick += data_siparisBilgi_CellClick;
             data_siparisBilgi.CellEndEdit += data_siparisBilgi_CellEndEdit;
@@ -204,6 +208,54 @@
             lblYetkiSeviyesi.TabIndex = 13;
             lblYetkiSeviyesi.Text = "labell";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.BackColor = Color.Transparent;
+            label5.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            label5.ForeColor = Color.Green;
+            label5.Location = new Point(12, 839);
+            label5.Name = "label5";
+            label5.Size = new Size(443, 30);
+            label5.TabIndex = 1;
+            label5.Text = "Yeni Sipariş Oluşturmak İçin Lütfen Tıklayın";
+            // 
+            // btn_siparisEkle
+            // 
+            btn_siparisEkle.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_siparisEkle.ForeColor = SystemColors.ActiveCaptionText;
+            btn_siparisEkle.Location = new Point(461, 823);
+            btn_siparisEkle.Name = "btn_siparisEkle";
+            btn_siparisEkle.Size = new Size(145, 46);
+            btn_siparisEkle.TabIndex = 14;
+            btn_siparisEkle.Text = "Sipariş Ekle";
+            btn_siparisEkle.UseVisualStyleBackColor = true;
+            btn_siparisEkle.Click += btn_siparisEkle_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.Transparent;
+            label6.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            label6.ForeColor = Color.Green;
+            label6.Location = new Point(735, 839);
+            label6.Name = "label6";
+            label6.Size = new Size(342, 30);
+            label6.TabIndex = 1;
+            label6.Text = "Stok Eklemek İçin Lütfen Tıklayın";
+            // 
+            // btn_stokDuzenle
+            // 
+            btn_stokDuzenle.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 162);
+            btn_stokDuzenle.ForeColor = SystemColors.ActiveCaptionText;
+            btn_stokDuzenle.Location = new Point(1139, 823);
+            btn_stokDuzenle.Name = "btn_stokDuzenle";
+            btn_stokDuzenle.Size = new Size(145, 46);
+            btn_stokDuzenle.TabIndex = 14;
+            btn_stokDuzenle.Text = "Stok Ekle";
+            btn_stokDuzenle.UseVisualStyleBackColor = true;
+            btn_stokDuzenle.Click += btn_stokDuzenle_Click;
+            // 
             // Calisan_Ekrani
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -212,6 +264,8 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1306, 903);
+            Controls.Add(btn_stokDuzenle);
+            Controls.Add(btn_siparisEkle);
             Controls.Add(lblYetkiSeviyesi);
             Controls.Add(btn_geri);
             Controls.Add(btn_StokBilgileri);
@@ -224,6 +278,8 @@
             Controls.Add(label3);
             Controls.Add(data_vardiyaSaat);
             Controls.Add(data_musteriBilgi);
+            Controls.Add(label6);
+            Controls.Add(label5);
             Controls.Add(label1);
             Controls.Add(data_stokBilgi);
             ForeColor = SystemColors.ActiveCaption;
@@ -254,5 +310,9 @@
         private Button btn_StokBilgileri;
         private Button btn_geri;
         private Label lblYetkiSeviyesi;
+        private Label label5;
+        private Button btn_siparisEkle;
+        private Label label6;
+        private Button btn_stokDuzenle;
     }
 }
