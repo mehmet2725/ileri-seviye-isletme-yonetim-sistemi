@@ -24,16 +24,24 @@ namespace ileri_seviye_depo_stoğu_projesi
                 {
                     connection.Open();
 
-                    // Müşteri bilgilerini DataGridView'e doldurmak
-                    string query = "SELECT * FROM musteriler WHERE musteri_id = @musteriId";
+                    // `kullanici_id` üzerinden `musteriler` tablosundaki bilgileri çekiyoruz
+                    string query = "SELECT * FROM musteriler WHERE kullanici_id = @kullaniciId";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        cmd.Parameters.AddWithValue("@musteriId", musteriId);
+                        cmd.Parameters.AddWithValue("@kullaniciId", musteriId); // `musteriId`, giriş yapan kullanıcının ID'si
 
                         MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                         DataTable table = new DataTable();
                         adapter.Fill(table);
-                        data_musteriBilgi.DataSource = table; // Veriyi DataGridView'e bağla
+
+                        if (table.Rows.Count > 0) // Eğer veri dönerse DataGridView'e bağla
+                        {
+                            data_musteriBilgi.DataSource = table;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Müşteri bilgisi bulunamadı.", "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
 
                     // Log kaydı ekleme
@@ -273,25 +281,23 @@ namespace ileri_seviye_depo_stoğu_projesi
                 {
                     connection.Open();
 
-                    // musteriler tablosunu güncelleme sorgusu
-                    string updateMusterilerQuery = "UPDATE musteriler SET telefon = @yeniTelefon, eposta = @yeniEposta WHERE musteri_id = @musteriId";
+                    // Önce `musteriler` tablosunu güncelle
+                    string updateMusterilerQuery = "UPDATE musteriler SET telefon = @yeniTelefon, eposta = @yeniEposta WHERE kullanici_id = @kullaniciId";
                     using (MySqlCommand cmdMusteriler = new MySqlCommand(updateMusterilerQuery, connection))
                     {
                         cmdMusteriler.Parameters.AddWithValue("@yeniTelefon", yeniTelefon);
                         cmdMusteriler.Parameters.AddWithValue("@yeniEposta", yeniEposta);
-                        cmdMusteriler.Parameters.AddWithValue("@musteriId", musteriId);
-
-                        cmdMusteriler.ExecuteNonQuery(); // Güncelleme sorgusunu çalıştır
+                        cmdMusteriler.Parameters.AddWithValue("@kullaniciId", musteriId); // Kullanıcı ID'si `kullanici_id` ile eşleşiyor
+                        cmdMusteriler.ExecuteNonQuery();
                     }
 
-                    // kullanicilar tablosunu güncelleme sorgusu
+                    // Ardından `kullanicilar` tablosunu güncelle
                     string updateKullanicilarQuery = "UPDATE kullanicilar SET eposta = @yeniEposta WHERE kullanici_id = @kullaniciId";
                     using (MySqlCommand cmdKullanicilar = new MySqlCommand(updateKullanicilarQuery, connection))
                     {
                         cmdKullanicilar.Parameters.AddWithValue("@yeniEposta", yeniEposta);
-                        cmdKullanicilar.Parameters.AddWithValue("@kullaniciId", musteriId);
-
-                        cmdKullanicilar.ExecuteNonQuery(); // Güncelleme sorgusunu çalıştır
+                        cmdKullanicilar.Parameters.AddWithValue("@kullaniciId", musteriId); // Aynı ID ile eşleştiriyoruz
+                        cmdKullanicilar.ExecuteNonQuery();
                     }
 
                     // Log kaydı ekleme (müşteriye gösterilmeyecek)
@@ -323,6 +329,23 @@ namespace ileri_seviye_depo_stoğu_projesi
             }
         }
 
+        private bool IsValidMusteriId(int musteriId)
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM musteriler WHERE musteri_id = @musteriId";
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@musteriId", musteriId);
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    MessageBox.Show($"Müşteri ID Doğrulama Sonucu: {count}"); // Burada sonucu yazdır
+                    return count > 0;
+                }
+            }
+        }
+
         private void btn_gonder_Click(object sender, EventArgs e)
         {
             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
@@ -333,20 +356,34 @@ namespace ileri_seviye_depo_stoğu_projesi
                 {
                     connection.Open();
 
+                    // Kullanıcı ID'si ile müşteri var mı kontrol et
+                    string musteriKontrolQuery = "SELECT COUNT(*) FROM musteriler WHERE kullanici_id = @kullaniciId";
+                    using (MySqlCommand musteriKontrolCmd = new MySqlCommand(musteriKontrolQuery, connection))
+                    {
+                        musteriKontrolCmd.Parameters.AddWithValue("@kullaniciId", musteriId); // Burada kullanici_id kontrol ediliyor.
+                        int musteriSayisi = Convert.ToInt32(musteriKontrolCmd.ExecuteScalar());
+
+                        if (musteriSayisi == 0)
+                        {
+                            MessageBox.Show("Bu müşteri kaydı mevcut değil!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+
                     // Feedback verisini ekleme sorgusu
                     string query = "INSERT INTO feedback (musteri_id, geri_bildirim, tarih) " +
-                                   "VALUES (@musteriId, @feedback, NOW())";
+                                   "VALUES ((SELECT musteri_id FROM musteriler WHERE kullanici_id = @kullaniciId), @feedback, NOW())";
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        cmd.Parameters.AddWithValue("@musteriId", musteriId); // Mevcut müşterinin ID'si
+                        cmd.Parameters.AddWithValue("@kullaniciId", musteriId); // Kullanıcı ID'si üzerinden işlem yapıyoruz.
                         cmd.Parameters.AddWithValue("@feedback", rtb_feedback.Text); // Feedback içeriği
 
-                        int rowsAffected = cmd.ExecuteNonQuery(); // Veriyi ekliyoruz
+                        int rowsAffected = cmd.ExecuteNonQuery();
 
                         if (rowsAffected > 0)
                         {
                             MessageBox.Show("Geri bildiriminiz için teşekkür ederiz!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            rtb_feedback.Clear(); // TextBox'u temizle
+                            rtb_feedback.Clear();
                         }
                         else
                         {

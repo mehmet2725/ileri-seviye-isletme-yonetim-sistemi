@@ -8,59 +8,83 @@ namespace ileri_seviye_depo_stoğu_projesi
 {
     public partial class Calisan_Ekrani : Form
     {
-        public Calisan_Ekrani()
+        public Calisan_Ekrani(int kullaniciId)
         {
             InitializeComponent();
+            CurrentUserId = kullaniciId;  // Burada kullaniciId'yi constructor ile alıyoruz
         }
         public static int CurrentUserYetkiSeviyesi { get; set; }
+        public static int CurrentUserId { get; set; }
+
         private void Calisan_Ekrani_Load(object sender, EventArgs e)
         {
             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
 
-            try
+            string query = "SELECT yetki_seviyesi FROM calisanlar WHERE kullanici_id = @kullaniciId";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                try
                 {
                     connection.Open();
-
-                    // Kullanıcının yetki seviyesini kontrol et
-                    string query = "SELECT yetki_seviyesi FROM calisanlar WHERE kullanici_id = @kullaniciId";
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        cmd.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
-                        MessageBox.Show($"Çalışan Ekranı - CurrentUserId: {GirisEkrani.CurrentUserId}", "Debug");
+                        command.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
 
-                        object result = cmd.ExecuteScalar();
-                        // Debug için türünü ve değerini kontrol et
-                        MessageBox.Show($"ExecuteScalar Result: {result}, Type: {result?.GetType()}", "Debug ExecuteScalar Result");
-
-
+                        object result = command.ExecuteScalar();
                         if (result != null)
                         {
-                            GirisEkrani.CurrentUserYetkiSeviyesi = Convert.ToInt32(result);
+                            CurrentUserYetkiSeviyesi = Convert.ToInt32(result);
+                            lblYetkiSeviyesi.Text = $" {CurrentUserYetkiSeviyesi}";
 
-                            // Yetki seviyesini label'e yazdır
-                            lblYetkiSeviyesi.Text = "Yetki Seviyesi: " + GirisEkrani.CurrentUserYetkiSeviyesi.ToString();
-
-                            // Yetki seviyesine göre butonları ayarla
-                            btn_calismaVeri.Enabled = true;
-                            btn_SiparisBilgileri.Enabled = GirisEkrani.CurrentUserYetkiSeviyesi >= 2;
-                            btn_StokBilgileri.Enabled = GirisEkrani.CurrentUserYetkiSeviyesi >= 2;
-                            btn_musteriVeri.Enabled = GirisEkrani.CurrentUserYetkiSeviyesi == 3;
+                            // Yetki seviyesine göre butonları aktif veya tıklanamaz yapıyoruz
+                            if (CurrentUserYetkiSeviyesi == 1)
+                            {
+                                // Seviye 1: sadece calismaVeri butonu tıklanabilir olacak
+                                btn_calismaVeri.Enabled = true;
+                                btn_musteriVeri.Enabled = false;
+                                btn_SiparisBilgileri.Enabled = false;
+                                btn_StokBilgileri.Enabled = false;
+                                btn_siparisEkle.Enabled = false;
+                                btn_stokDuzenle.Enabled = false;
+                            }
+                            else if (CurrentUserYetkiSeviyesi == 2)
+                            {
+                                // Seviye 2: btn_musteriVeri dışında tüm butonlar aktif olacak
+                                btn_calismaVeri.Enabled = true;
+                                btn_musteriVeri.Enabled = false;
+                                btn_SiparisBilgileri.Enabled = true;
+                                btn_StokBilgileri.Enabled = true;
+                                btn_siparisEkle.Enabled = true;
+                                btn_stokDuzenle.Enabled = true;
+                            }
+                            else if (CurrentUserYetkiSeviyesi == 3)
+                            {
+                                // Seviye 3: tüm butonlar aktif olacak
+                                btn_calismaVeri.Enabled = true;
+                                btn_musteriVeri.Enabled = true;
+                                btn_SiparisBilgileri.Enabled = true;
+                                btn_StokBilgileri.Enabled = true;
+                                btn_siparisEkle.Enabled = true;
+                                btn_stokDuzenle.Enabled = true;
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("Yetki seviyesi alınamadı!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Yetki seviyesi alınamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
         }
+
+        
+
+
 
 
         private void btn_calismaVeri_Click(object sender, EventArgs e)
@@ -158,12 +182,12 @@ namespace ileri_seviye_depo_stoğu_projesi
 
                     // Sipariş bilgilerini çekme sorgusu
                     string query = @"
-                SELECT 
-                    siparis_id AS 'Sipariş ID', 
-                    musteri_id AS 'Müşteri ID', 
-                    toplam_tutar AS 'Toplam Tutar', 
-                    siparis_durumu AS 'Sipariş Durumu' 
-                FROM siparisler";
+            SELECT 
+                siparis_id AS 'Sipariş ID', 
+                musteri_id AS 'Müşteri ID', 
+                toplam_tutar AS 'Toplam Tutar', 
+                siparis_durumu AS 'Sipariş Durumu' 
+            FROM siparisler";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
@@ -175,12 +199,12 @@ namespace ileri_seviye_depo_stoğu_projesi
                         data_siparisBilgi.Columns.Clear(); // Eski sütunları temizle
                         data_siparisBilgi.DataSource = table;
 
-                        // Onayla ve İptal Et butonları ekle
+                        // Onayla ve İptal Et butonlarını ekle
                         AddButtonColumn("Onayla", "Onayla");
                         AddButtonColumn("İptal Et", "İptal Et");
 
-                        // Sadece 3. seviye kullanıcılar için Düzenle butonu ekle
-                        if (GirisEkrani.CurrentUserYetkiSeviyesi == 3)
+                        // lblyetkiseviyesi kontrolü ile Düzenle butonunu ekle
+                        if (lblYetkiSeviyesi.Text.Trim() == "3") // Trim ile boşlukları kaldırıyoruz
                         {
                             AddButtonColumn("Düzenle", "Düzenle");
                         }
@@ -200,6 +224,10 @@ namespace ileri_seviye_depo_stoğu_projesi
 
         private void AddButtonColumn(string name, string text)
         {
+            if (GirisEkrani.CurrentUserYetkiSeviyesi == 3)
+            {
+                AddButtonColumn("Düzenle", "Düzenle");
+            }
             // Eğer zaten eklenmişse tekrar ekleme
             if (data_siparisBilgi.Columns.Contains(name))
                 return;
@@ -291,7 +319,8 @@ namespace ileri_seviye_depo_stoğu_projesi
             {
                 int rowIndex = e.RowIndex;
 
-                if (rowIndex >= 0 && e.ColumnIndex >= 0) // Tıklanan hücre veri hücresiyse
+                // Eğer geçerli bir satır tıklanmışsa
+                if (rowIndex >= 0 && e.ColumnIndex >= 0)
                 {
                     DataGridViewRow selectedRow = data_siparisBilgi.Rows[rowIndex];
                     string siparisIdStr = selectedRow.Cells["Sipariş ID"].Value?.ToString();
@@ -302,28 +331,24 @@ namespace ileri_seviye_depo_stoğu_projesi
                         return;
                     }
 
-                    // "Onayla" sütununa tıklandıysa
-                    if (e.ColumnIndex == data_siparisBilgi.Columns["Onayla"].Index)
+                    // Eğer "Düzenle" butonuna tıklanmışsa
+                    if (data_siparisBilgi.Columns[e.ColumnIndex].Name == "Düzenle")
                     {
-                        UpdateSiparisDurumu(siparisIdStr, "Tamamlandi");
+                        int siparisId = Convert.ToInt32(siparisIdStr);
+
+                        // Yeni düzenleme formunu aç
+                        SiparisDuzenleForm duzenleForm = new SiparisDuzenleForm(siparisId);
+                        duzenleForm.ShowDialog();
                     }
-                    // "İptal Et" sütununa tıklandıysa
-                    else if (e.ColumnIndex == data_siparisBilgi.Columns["İptal Et"].Index)
+                    else
                     {
-                        UpdateSiparisDurumu(siparisIdStr, "Iptal");
-                    }
-                    // "Düzenle" sütununa tıklandıysa
-                    else if (data_siparisBilgi.Columns[e.ColumnIndex].Name == "Düzenle" && GirisEkrani.CurrentUserYetkiSeviyesi == 3)
-                    {
-                        int siparisId = Convert.ToInt32(siparisIdStr); // Sipariş ID'sini int'e çevir
-                        SiparisDuzenleForm duzenleForm = new SiparisDuzenleForm(siparisId); // Yeni formu oluştur
-                        duzenleForm.ShowDialog(); // Formu göster
+                        MessageBox.Show("Bu işlem için yetki kontrolü gerekmiyor. Lütfen doğru butona tıklayın.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -669,29 +694,23 @@ namespace ileri_seviye_depo_stoğu_projesi
 
         private void btn_siparisEkle_Click(object sender, EventArgs e)
         {
-            if (GirisEkrani.CurrentUserYetkiSeviyesi < 2)
-            {
-                MessageBox.Show("Bu işlemi gerçekleştirmek için yetkiniz yok.", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // SiparisEkle formunu aç
-            SiparisEkle siparisEkleForm = new SiparisEkle();
-            siparisEkleForm.ShowDialog();
+            SiparisEkle siparisekleForm = new SiparisEkle();
+            siparisekleForm.ShowDialog();
+            
         }
 
         private void btn_stokDuzenle_Click(object sender, EventArgs e)
         {
-            // Yetki kontrolü
-            if (GirisEkrani.CurrentUserYetkiSeviyesi < 2)
-            {
-                MessageBox.Show("Bu işlemi gerçekleştirmek için yetkiniz yok.", "Yetki Hatası", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+           
 
             // Yeni ürün ekleme için boş form
             StokDuzenle stokDuzenleForm = new StokDuzenle("", "", "", "", DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"));
             stokDuzenleForm.ShowDialog();
+        }
+
+        public void lblYetkiSeviyesi_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

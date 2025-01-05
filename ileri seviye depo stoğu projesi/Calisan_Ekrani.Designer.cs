@@ -207,6 +207,7 @@
             lblYetkiSeviyesi.Size = new Size(59, 25);
             lblYetkiSeviyesi.TabIndex = 13;
             lblYetkiSeviyesi.Text = "labell";
+            lblYetkiSeviyesi.Click += lblYetkiSeviyesi_Click;
             // 
             // label5
             // 

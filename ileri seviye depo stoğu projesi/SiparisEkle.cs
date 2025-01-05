@@ -33,9 +33,16 @@ namespace ileri_seviye_depo_stoğu_projesi
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
 
-                        cmbMusteriSecim.DataSource = dt;
-                        cmbMusteriSecim.DisplayMember = "ad_soyad";
-                        cmbMusteriSecim.ValueMember = "kullanici_id";
+                        if (dt.Rows.Count > 0) // Eğer müşteri bilgileri varsa ComboBox'u doldur
+                        {
+                            cmbMusteriSecim.DataSource = dt;
+                            cmbMusteriSecim.DisplayMember = "ad_soyad";
+                            cmbMusteriSecim.ValueMember = "kullanici_id";
+                        }
+                        else
+                        {
+                            MessageBox.Show("Müşteri bilgileri bulunamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
 
                     // Ürün bilgilerini ComboBox'a çek
@@ -45,15 +52,21 @@ namespace ileri_seviye_depo_stoğu_projesi
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
 
-                        cmbUrunSecim.DataSource = dt;
-                        cmbUrunSecim.DisplayMember = "urun_adi";
-                        cmbUrunSecim.ValueMember = "urun_id";
+                        if (dt.Rows.Count > 0) // Eğer ürün bilgileri varsa ComboBox'u doldur
+                        {
+                            cmbUrunSecim.DataSource = dt;
+                            cmbUrunSecim.DisplayMember = "urun_adi";
+                            cmbUrunSecim.ValueMember = "urun_id";
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ürün bilgileri bulunamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
 
                     // Sipariş Durumu Seçeneklerini Ekle
                     cmbSiparisDurumu.Items.AddRange(new string[] { "Hazirlaniyor", "Tamamlandi", "Iptal" });
                     cmbSiparisDurumu.SelectedIndex = 0; // Varsayılan olarak "Hazırlanıyor" seçili olsun
-                    btn_hesapla.Click += btn_hesapla_Click;
                 }
             }
             catch (Exception ex)
@@ -85,6 +98,21 @@ namespace ileri_seviye_depo_stoğu_projesi
             }
         }
 
+        private bool IsValidMusteriId(int musteriId)
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM musteriler WHERE musteri_id = @musteriId";
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@musteriId", musteriId);
+                    int count = Convert.ToInt32(cmd.ExecuteScalar());
+                    return count > 0; // Müşteri mevcutsa true döner
+                }
+            }
+        }
 
         private void btnSiparisEkle_Click(object sender, EventArgs e)
         {
@@ -96,10 +124,35 @@ namespace ileri_seviye_depo_stoğu_projesi
                     connection.Open();
 
                     // Sipariş bilgilerini al
+                    if (cmbMusteriSecim.SelectedValue == null || cmbMusteriSecim.SelectedValue.ToString() == "0")
+                    {
+                        MessageBox.Show("Lütfen geçerli bir müşteri seçin!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     int musteriId = Convert.ToInt32(cmbMusteriSecim.SelectedValue);
+
+                    if (cmbUrunSecim.SelectedValue == null || cmbUrunSecim.SelectedValue.ToString() == "0")
+                    {
+                        MessageBox.Show("Lütfen geçerli bir ürün seçin!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     int urunId = Convert.ToInt32(cmbUrunSecim.SelectedValue);
+
                     int miktar = Convert.ToInt32(numSiparisMiktar.Value);
-                    decimal toplamTutar = miktar * Convert.ToDecimal(txtUrunFiyat.Text);
+                    if (miktar <= 0)
+                    {
+                        MessageBox.Show("Lütfen geçerli bir miktar girin!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    decimal fiyat = 0;
+                    if (!decimal.TryParse(txtUrunFiyat.Text, out fiyat) || fiyat <= 0)
+                    {
+                        MessageBox.Show("Lütfen geçerli bir fiyat girin!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    decimal toplamTutar = fiyat * miktar;
 
                     // Stok kontrolü
                     string stokQuery = "SELECT stok_miktari FROM urunler WHERE urun_id = @urunId";
@@ -131,14 +184,6 @@ namespace ileri_seviye_depo_stoğu_projesi
                         stokUpdateCmd.Parameters.AddWithValue("@miktar", miktar);
                         stokUpdateCmd.Parameters.AddWithValue("@urunId", urunId);
                         stokUpdateCmd.ExecuteNonQuery();
-                    }
-
-                    // Log kaydı
-                    string logQuery = "INSERT INTO loglar (kullanici_id, islem_tarihi, tablo_adi, islem_tipi, detaylar) VALUES (@kullaniciId, NOW(), 'siparisler', 'Ekleme', 'Yeni sipariş eklendi.')";
-                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, connection))
-                    {
-                        logCmd.Parameters.AddWithValue("@kullaniciId", GirisEkrani.CurrentUserId);
-                        logCmd.ExecuteNonQuery();
                     }
 
                     MessageBox.Show("Sipariş başarıyla eklendi!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);

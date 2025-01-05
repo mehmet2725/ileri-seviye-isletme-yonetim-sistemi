@@ -92,6 +92,14 @@ namespace ileri_seviye_depo_stoğu_projesi
                 {
                     connection.Open();
 
+                    // Fiyat değeri için decimal'e dönüştürme
+                    decimal fiyat = 0;
+                    if (!decimal.TryParse(txtFiyat.Text, out fiyat))
+                    {
+                        MessageBox.Show("Fiyat geçerli bir sayı olmalıdır.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
                     if (!string.IsNullOrEmpty(lblUrunId.Text)) // Düzenleme işlemi
                     {
                         string updateQuery = "UPDATE urunler SET urun_adi = @urunAdi, stok_miktari = @stokMiktari, fiyat = @fiyat, guncellenme_tarihi = NOW() WHERE urun_id = @urunId";
@@ -99,7 +107,7 @@ namespace ileri_seviye_depo_stoğu_projesi
                         {
                             cmd.Parameters.AddWithValue("@urunAdi", txtUrunAdi.Text);
                             cmd.Parameters.AddWithValue("@stokMiktari", txtStokMiktari.Text);
-                            cmd.Parameters.AddWithValue("@fiyat", txtFiyat.Text);
+                            cmd.Parameters.AddWithValue("@fiyat", fiyat);  // Fiyatı decimal olarak ekledik
                             cmd.Parameters.AddWithValue("@urunId", lblUrunId.Text);
                             cmd.ExecuteNonQuery();
                         }
@@ -114,7 +122,7 @@ namespace ileri_seviye_depo_stoğu_projesi
                         {
                             cmd.Parameters.AddWithValue("@urunAdi", txtUrunAdi.Text);
                             cmd.Parameters.AddWithValue("@stokMiktari", txtStokMiktari.Text);
-                            cmd.Parameters.AddWithValue("@fiyat", txtFiyat.Text);
+                            cmd.Parameters.AddWithValue("@fiyat", fiyat);  // Fiyatı decimal olarak ekledik
                             cmd.ExecuteNonQuery();
                         }
 

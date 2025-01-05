@@ -19,9 +19,60 @@ namespace ileri_seviye_depo_stoğu_projesi
         private void GirisEkrani_Load(object sender, EventArgs e)
         {
             this.AcceptButton = btn_giris; // Enter tuşu 'btnGiris' butonunu tetikler.
+            MessageBox.Show($"CurrentUserId: {CurrentUserId}", "Debug");
+
+
+
 
         }
 
+        /* private void KullaniciGiris(string kullaniciAdi, string sifre)
+         {
+             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
+             string query = "SELECT yetki_seviyesi FROM kullanicilar WHERE eposta = @eposta AND sifre = @sifre";
+
+             try
+             {
+                 using (MySqlConnection connection = new MySqlConnection(connectionString))
+                 {
+                     connection.Open();
+                     MySqlCommand cmd = new MySqlCommand(query, connection);
+                     cmd.Parameters.AddWithValue("@eposta", kullaniciAdi);
+                     cmd.Parameters.AddWithValue("@sifre", sifre);
+
+                     object result = cmd.ExecuteScalar();
+                     if (result != null && result != DBNull.Value)
+                     {
+                         int yetkiSeviyesi = Convert.ToInt32(result);
+                         // Yetki seviyesine göre giriş işlemi
+                         if (yetkiSeviyesi == 1)
+                         {
+                             // Çalışan girişine devam et
+                             MessageBox.Show("Çalışan olarak giriş yapıldı.");
+                             // Çalışan ekranına yönlendir
+                         }
+                         else if (yetkiSeviyesi == 2)
+                         {
+                             // Yönetici girişine yönlendir
+                             MessageBox.Show("Yönetici olarak giriş yapıldı.");
+                             // Yönetici ekranına yönlendir
+                         }
+                         else
+                         {
+                             MessageBox.Show("Geçersiz yetki seviyesi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                         }
+                     }
+                     else
+                     {
+                         MessageBox.Show("Kullanıcı adı veya şifre yanlış.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                     }
+                 }
+             }
+             catch (Exception ex)
+             {
+                 MessageBox.Show($"Hata: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+             }
+         }*/
 
 
         private void btn_giris_Click(object sender, EventArgs e)
@@ -29,103 +80,72 @@ namespace ileri_seviye_depo_stoğu_projesi
             string kullaniciAdi = txt_kulAd.Text.Trim();
             string sifre = txt_sifre.Text.Trim();
 
-            if (string.IsNullOrEmpty(kullaniciAdi) || string.IsNullOrEmpty(sifre))
-            {
-                MessageBox.Show("Kullanıcı adı ve şifre boş bırakılamaz!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txt_kulAd.Focus();
-                return;
-            }
-
             string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
             string query = "SELECT kullanici_id, rol FROM kullanicilar WHERE eposta = @kullaniciAdi AND sifre = @sifre";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@kullaniciAdi", kullaniciAdi);
+                    command.Parameters.AddWithValue("@sifre", sifre);
 
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            CurrentUserId = reader.GetInt32("kullanici_id");
+                            string rol = reader.GetString("rol");
+
+                            // Burada sadece kullanıcının rolüne göre yönlendirme yapıyoruz
+                            if (rol == "Yonetici")
+                            {
+                                new Yonetici_ekrani().Show();
+                            }
+                            else if (rol == "Calisan")
+                            {
+                                new Calisan_Ekrani(CurrentUserId).Show(); // CurrentUserId'yi parametre olarak gönderiyoruz
+                            }
+                            else if (rol == "Musteri")
+                            {
+                                new MusteriEkrani(CurrentUserId).Show();
+                            }
+
+                            this.Hide(); // Giriş ekranını gizliyoruz
+                        }
+                        else
+                        {
+                            MessageBox.Show("Kullanıcı adı veya şifre yanlış!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
+        }
+        
+
+        public static void LogIslem(int kullaniciId, string islemTipi, string detaylar)
+        {
+            string connectionString = "Server=localhost;Database=bitirme_projesi;Uid=root;Pwd=138426;";
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    string query = "INSERT INTO loglar (kullanici_id, islem_tipi, detaylar, islem_tarihi) VALUES (@kullaniciId, @islemTipi, @detaylar, NOW())";
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@kullaniciAdi", kullaniciAdi);
-                        command.Parameters.AddWithValue("@sifre", sifre);
-
-                        using (MySqlDataReader reader = command.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                CurrentUserId = reader.GetInt32("kullanici_id");
-                                string rol = reader.GetString("rol");
-                                reader.Close();
-
-                                // Çalışanlar için yetki seviyesi kontrolü
-                                if (rol == "Calisan")
-                                {
-                                    string yetkiSeviyesiQuery = "SELECT yetki_seviyesi FROM calisanlar WHERE kullanici_id = @kullaniciId";
-                                    using (MySqlCommand yetkiCmd = new MySqlCommand(yetkiSeviyesiQuery, connection))
-                                    {
-                                        yetkiCmd.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
-                                        object yetkiSeviyesiResult = yetkiCmd.ExecuteScalar();
-
-                                        if (yetkiSeviyesiResult != null)
-                                        {
-                                            CurrentUserYetkiSeviyesi = Convert.ToInt32(yetkiSeviyesiResult);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Yetki seviyesi alınamadı. Sistem yöneticisine başvurun.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                            return;
-                                        }
-                                    }
-                                }
-
-                                // Rol kontrolü ve ekran yönlendirme
-                                if (rol == "Yonetici")
-                                {
-                                    new Yonetici_ekrani().Show();
-                                }
-                                else if (rol == "Calisan")
-                                {
-                                    new Calisan_Ekrani().Show();
-                                }
-                                else if (rol == "Musteri")
-                                {
-                                    new MusteriEkrani(CurrentUserId).Show();
-                                }
-
-                                this.Hide();
-                            }
-                            else
-                            {
-                                MessageBox.Show("Kullanıcı adı veya şifre yanlış!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                txt_kulAd.Text = "";
-                                txt_sifre.Text = "";
-                                txt_kulAd.Focus();
-                                return;
-                            }
-                        }
-                    }
-                }
-
-                // Log kaydı
-                using (MySqlConnection logConnection = new MySqlConnection(connectionString))
-                {
-                    logConnection.Open();
-                    string logQuery = "INSERT INTO loglar (kullanici_id, islem_tarihi, tablo_adi, islem_tipi, detaylar) " +
-                                      "VALUES (@kullaniciId, NOW(), NULL, 'Giriş', 'Kullanıcı başarıyla giriş yaptı.')";
-
-                    using (MySqlCommand logCmd = new MySqlCommand(logQuery, logConnection))
-                    {
-                        logCmd.Parameters.AddWithValue("@kullaniciId", CurrentUserId);
-                        logCmd.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("@kullaniciId", kullaniciId);
+                        cmd.Parameters.AddWithValue("@islemTipi", islemTipi.Length > 100 ? islemTipi.Substring(0, 100) : islemTipi);  // 100 karakterden fazla olmayacak
+                        cmd.Parameters.AddWithValue("@detaylar", detaylar.Length > 255 ? detaylar.Substring(0, 255) : detaylar);  // 255 karakterden fazla olmayacak
+                        cmd.ExecuteNonQuery();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bir hata oluştu: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Loglama sırasında bir hata oluştu: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
 
 
@@ -139,7 +159,7 @@ namespace ileri_seviye_depo_stoğu_projesi
             txt_sifre.PasswordChar = chk_sifreGoster.Checked ? '\0' : '*';
         }
 
-        private bool DogruKullaniciMi(string kullaniciAdi, string sifre)
+       /* private bool DogruKullaniciMi(string kullaniciAdi, string sifre)
         {
             bool sonuc = false;
 
@@ -170,7 +190,7 @@ namespace ileri_seviye_depo_stoğu_projesi
             return sonuc;
         }
 
-
+        */
        
     }
 }
