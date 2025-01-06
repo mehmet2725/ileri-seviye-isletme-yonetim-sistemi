@@ -731,7 +731,7 @@
             btn_feedbackListe.Name = "btn_feedbackListe";
             btn_feedbackListe.Size = new Size(75, 23);
             btn_feedbackListe.TabIndex = 0;
-            btn_feedbackListe.Text = "button1";
+            btn_feedbackListe.Text = "Gönder";
             btn_feedbackListe.UseVisualStyleBackColor = true;
             btn_feedbackListe.Click += btn_feedbackListe_Click;
             // 
